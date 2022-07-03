@@ -30,29 +30,27 @@ public class ReflectRestController {
     @Autowired
     PostService postService;
 
-    // Xem lượt like
+    // Xem like
     @GetMapping("/getAllLike")
-    public ResponseEntity<Iterable<LikePost>> getAllLike(@RequestParam Long idPost) {
-        Optional<Post2> postOptional = postService.findById(idPost);
-        if (!postOptional.isPresent()) {
+    public ResponseEntity<List<LikePost>> getAllLike(@RequestParam Long idPost) {
+        if (idPost == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Iterable<LikePost> likePosts = likePostService.findAll();
-        if (!likePosts.iterator().hasNext()) {
+        List<LikePost> likePosts = likePostService.findAllLikeByPostId(idPost);
+        if (likePosts.size() == 0) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(likePosts, HttpStatus.OK);
     }
 
-    // Xem lượt dislike
+    // Xem dislike
     @GetMapping("/getAllDisLike")
     public ResponseEntity<Iterable<DisLike>> getAllDisLike(@RequestParam Long idPost) {
-        Optional<Post2> postOptional = postService.findById(idPost);
-        if (!postOptional.isPresent()) {
+        if (idPost == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Iterable<DisLike> disLikes = disLikeService.findAll();
-        if (!disLikes.iterator().hasNext()) {
+        List<DisLike> disLikes = disLikeService.findAllDisLikeByPostId(idPost);
+        if (disLikes.size() == 0) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(disLikes, HttpStatus.OK);
@@ -63,10 +61,10 @@ public class ReflectRestController {
     public ResponseEntity<LikePost> createLike(@RequestBody LikePost likePost,
                                                @RequestParam Long idPost,
                                                @RequestParam Long idUser) {
-       List<LikePost> likePostIterable = likePostService.findLike(idPost, idUser);
-       if (likePostIterable.size() == 1) {
-           return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-       }
+        List<LikePost> likePostIterable = likePostService.findLike(idPost, idUser);
+        if (likePostIterable.size() == 1) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
 
         Optional<User> userOptional = userService.findById(idUser);
         if (!userOptional.isPresent()) {
@@ -83,13 +81,10 @@ public class ReflectRestController {
                 disLikeService.save(disLike);
             }
         }
-
         likePost.setUserLike(userOptional.get());
         likePost.setCreateAt(new Date());
         likePost.setPost(postOptional.get());
         likePostService.save(likePost);
-
-
         return new ResponseEntity<>(likePost, HttpStatus.OK);
     }
 

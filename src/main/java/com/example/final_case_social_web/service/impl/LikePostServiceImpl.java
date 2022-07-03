@@ -38,4 +38,9 @@ public class LikePostServiceImpl implements LikePostService {
     public List<LikePost> findLike(Long idPost, Long idUser) {
         return likePostRepository.findLike(idPost, idUser);
     }
+
+    @Override
+    public List<LikePost> findAllLikeByPostId(Long idPost) {
+        return likePostRepository.findAllLikeByPostId(idPost);
+    }
 }

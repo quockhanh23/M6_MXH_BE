@@ -38,4 +38,9 @@ public class DislikeServiceImpl implements DisLikeService {
     public List<DisLike> findDisLike(Long idPost, Long idUser) {
         return disLikeRepository.findDisLike(idPost, idUser);
     }
+
+    @Override
+    public List<DisLike> findAllDisLikeByPostId(Long idPost) {
+        return disLikeRepository.findAllDisLikeByPostId(idPost);
+    }
 }
