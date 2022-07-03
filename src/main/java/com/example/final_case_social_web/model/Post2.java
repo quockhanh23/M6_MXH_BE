@@ -18,8 +18,6 @@ public class Post2 {
     private String content;
     private String status;
     private boolean isDelete;
-    private String like;
-    private String disLike;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

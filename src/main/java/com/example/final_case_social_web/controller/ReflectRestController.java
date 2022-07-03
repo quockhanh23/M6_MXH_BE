@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -28,7 +30,7 @@ public class ReflectRestController {
     @Autowired
     PostService postService;
 
-
+    // Xem lượt like
     @GetMapping("/getAllLike")
     public ResponseEntity<Iterable<LikePost>> getAllLike(@RequestParam Long idPost) {
         Optional<Post2> postOptional = postService.findById(idPost);
@@ -42,6 +44,7 @@ public class ReflectRestController {
         return new ResponseEntity<>(likePosts, HttpStatus.OK);
     }
 
+    // Xem lượt dislike
     @GetMapping("/getAllDisLike")
     public ResponseEntity<Iterable<DisLike>> getAllDisLike(@RequestParam Long idPost) {
         Optional<Post2> postOptional = postService.findById(idPost);
@@ -55,37 +58,67 @@ public class ReflectRestController {
         return new ResponseEntity<>(disLikes, HttpStatus.OK);
     }
 
+    // Tạo like
     @PostMapping("/createLike")
-    public ResponseEntity<LikePost> createLike(@RequestBody LikePost likePost, @RequestParam Long idPost) {
+    public ResponseEntity<LikePost> createLike(@RequestBody LikePost likePost,
+                                               @RequestParam Long idPost,
+                                               @RequestParam Long idUser) {
+       List<LikePost> likePostIterable = likePostService.findLike(idPost, idUser);
+       if (likePostIterable.size() == 1) {
+           return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+       }
+
+        Optional<User> userOptional = userService.findById(idUser);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         Optional<Post2> postOptional = postService.findById(idPost);
         if (!postOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Iterable<DisLike> disLikes = disLikeService.findAll();
         for (DisLike disLike : disLikes) {
-            if (disLike.getUserDisLike().equals(likePost.getUserLike())) {
+            if (disLike.getUserDisLike().getId().equals(idUser)) {
                 disLike.setUserDisLike(null);
                 disLikeService.save(disLike);
             }
         }
+
+        likePost.setUserLike(userOptional.get());
+        likePost.setCreateAt(new Date());
         likePost.setPost(postOptional.get());
         likePostService.save(likePost);
+
+
         return new ResponseEntity<>(likePost, HttpStatus.OK);
     }
 
+    // Tạo dislike
     @PostMapping("/createDisLike")
-    public ResponseEntity<DisLike> createDisLike(@RequestBody DisLike disLike, @RequestParam Long idPost) {
+    public ResponseEntity<DisLike> createDisLike(@RequestBody DisLike disLike,
+                                                 @RequestParam Long idPost,
+                                                 @RequestParam Long idUser) {
+        List<DisLike> disLikes = disLikeService.findDisLike(idPost, idUser);
+        if (disLikes.size() == 1) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        Optional<User> userOptional = userService.findById(idUser);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         Optional<Post2> postOptional = postService.findById(idPost);
         if (!postOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Iterable<LikePost> likePosts = likePostService.findAll();
         for (LikePost likePost : likePosts) {
-            if (likePost.getUserLike().equals(disLike.getUserDisLike())) {
+            if (likePost.getUserLike().getId().equals(idUser)) {
                 likePost.setUserLike(null);
                 likePostService.save(likePost);
             }
         }
+        disLike.setUserDisLike(userOptional.get());
+        disLike.setCreateAt(new Date());
         disLike.setPost(postOptional.get());
         disLikeService.save(disLike);
         return new ResponseEntity<>(disLike, HttpStatus.OK);

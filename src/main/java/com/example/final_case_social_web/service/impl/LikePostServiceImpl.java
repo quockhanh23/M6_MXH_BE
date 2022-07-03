@@ -6,6 +6,7 @@ import com.example.final_case_social_web.service.LikePostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,5 +32,10 @@ public class LikePostServiceImpl implements LikePostService {
     @Override
     public void remove(Long id) {
 
+    }
+
+    @Override
+    public List<LikePost> findLike(Long idPost, Long idUser) {
+        return likePostRepository.findLike(idPost, idUser);
     }
 }
