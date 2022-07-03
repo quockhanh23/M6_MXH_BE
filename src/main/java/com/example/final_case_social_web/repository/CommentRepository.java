@@ -11,10 +11,10 @@ import org.springframework.stereotype.Repository;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Modifying
-    @Query(value = "select * from comment where user_id=:id", nativeQuery = true)
+    @Query(value = "select * from comment where user_id = :id", nativeQuery = true)
     Iterable<Comment> getCommentByIdUser(@Param("id") Long id);
 
     @Modifying
-    @Query(value = "select * from comment where post_id=:id", nativeQuery = true)
+    @Query(value = "select * from comment where post_id = :id", nativeQuery = true)
     Iterable<Comment> getCommentByIdPost(@Param("id") Long id);
 }

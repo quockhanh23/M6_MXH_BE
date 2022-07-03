@@ -1,14 +1,13 @@
-package com.example.final_case_social_web.service.friend_relation;
+package com.example.final_case_social_web.service;
 
 import com.example.final_case_social_web.model.FriendRelation;
-import com.example.final_case_social_web.service.IGeneralService;
-import org.springframework.data.repository.query.Param;
+import com.example.final_case_social_web.service.GeneralService;
 
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
-public interface IFriendRelationService extends IGeneralService<FriendRelation> {
+public interface FriendRelationService extends GeneralService<FriendRelation> {
     Iterable<BigInteger> findAllIdUserNotFriend(Long id, Long id1);
 
     Iterable<BigInteger> findRequest(Long idUser);

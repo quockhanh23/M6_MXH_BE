@@ -2,14 +2,14 @@ package com.example.final_case_social_web.service.impl;
 
 import com.example.final_case_social_web.model.User;
 import com.example.final_case_social_web.repository.UserRepository;
-import com.example.final_case_social_web.service.IGeneralService;
+import com.example.final_case_social_web.service.GeneralService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class AccountService implements IGeneralService<User> {
+public class AccountServiceImpl implements GeneralService<User> {
 
     @Autowired
     private UserRepository userRepository;

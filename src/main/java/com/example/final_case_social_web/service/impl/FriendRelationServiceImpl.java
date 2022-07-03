@@ -1,8 +1,8 @@
-package com.example.final_case_social_web.service.friend_relation;
+package com.example.final_case_social_web.service.impl;
 
 import com.example.final_case_social_web.model.FriendRelation;
-import com.example.final_case_social_web.model.User;
 import com.example.final_case_social_web.repository.FriendRelationRepository;
+import com.example.final_case_social_web.service.FriendRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class FriendRelationServiceImpl implements IFriendRelationService {
+public class FriendRelationServiceImpl implements FriendRelationService {
     @Autowired
     private FriendRelationRepository friendRelationRepository;
 

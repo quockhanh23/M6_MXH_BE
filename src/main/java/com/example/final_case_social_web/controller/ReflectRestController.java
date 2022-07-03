@@ -65,7 +65,6 @@ public class ReflectRestController {
         if (likePostIterable.size() == 1) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
         Optional<User> userOptional = userService.findById(idUser);
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

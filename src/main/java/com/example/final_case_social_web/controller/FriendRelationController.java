@@ -4,7 +4,7 @@ import com.example.final_case_social_web.common.Common;
 import com.example.final_case_social_web.model.FriendRelation;
 import com.example.final_case_social_web.model.User;
 import com.example.final_case_social_web.service.UserService;
-import com.example.final_case_social_web.service.friend_relation.IFriendRelationService;
+import com.example.final_case_social_web.service.FriendRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import java.util.Optional;
 public class FriendRelationController {
 
     @Autowired
-    private IFriendRelationService friendRelationService;
+    private FriendRelationService friendRelationService;
 
     @Autowired
     private UserService userService;

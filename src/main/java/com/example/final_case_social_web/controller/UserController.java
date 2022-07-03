@@ -1,5 +1,6 @@
 package com.example.final_case_social_web.controller;
 
+import com.example.final_case_social_web.common.Common;
 import com.example.final_case_social_web.model.JwtResponse;
 import com.example.final_case_social_web.model.Role;
 import com.example.final_case_social_web.model.User;
@@ -50,13 +51,6 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
-    @GetMapping("/users")
-    public ResponseEntity<Iterable<User>> showAllUser() {
-        Iterable<User> users = userService.findAll();
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }
-
     @PostMapping("/register")
     public ResponseEntity<User> createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
@@ -82,6 +76,9 @@ public class UserController {
             roles1.add(role1);
             user.setRoles(roles1);
         }
+        if (user.getAvatar().equals("assets/images/defaultAva.png")) {
+            user.setAvatar(Common.defaultImage);
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
         userService.save(user);
@@ -94,10 +91,11 @@ public class UserController {
     @PostMapping("/matchPassword")
     public ResponseEntity<User> matches(@RequestBody User user) {
         Optional<User> userOptional = this.userService.findById(user.getId());
-        if (passwordEncoder.matches(user.getPassword(), userOptional.get().getPassword())){
+        if (passwordEncoder.matches(user.getPassword(), userOptional.get().getPassword())) {
             return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
-        }else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
         Authentication authentication = authenticationManager.authenticate(
@@ -126,15 +124,17 @@ public class UserController {
         user.setId(userOptional.get().getId());
         user.setUsername(userOptional.get().getUsername());
         user.setEnabled(userOptional.get().isEnabled());
-        if (!user.getPassword().equals(userOptional.get().getPassword())){
+        if (!user.getPassword().equals(userOptional.get().getPassword())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }else {user.setPassword(userOptional.get().getPassword());}
+        } else {
+            user.setPassword(userOptional.get().getPassword());
+        }
         user.setRoles(userOptional.get().getRoles());
-        if (!user.getConfirmPassword().equals(userOptional.get().getConfirmPassword())){
+        if (!user.getConfirmPassword().equals(userOptional.get().getConfirmPassword())) {
             user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
-        }else { user.setConfirmPassword(userOptional.get().getConfirmPassword());}
-
-
+        } else {
+            user.setConfirmPassword(userOptional.get().getConfirmPassword());
+        }
         userService.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }

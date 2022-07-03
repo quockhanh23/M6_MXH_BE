@@ -34,7 +34,7 @@ public class PostController {
     public ResponseEntity<Post2> createPost(@RequestBody Post2 post, @RequestParam Long idUser) {
         Optional<User> userOptional = userService.findById(idUser);
         if (!userOptional.isPresent()) {
-            return new ResponseEntity<>(post, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         post.setStatus(Common.statusPost1);
         post.setEditAt(null);
