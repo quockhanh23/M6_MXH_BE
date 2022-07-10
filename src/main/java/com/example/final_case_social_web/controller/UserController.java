@@ -142,4 +142,37 @@ public class UserController {
         userService.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
+    @DeleteMapping("/changeStatusUserActive/{id}")
+    public ResponseEntity<User> changeStatusUserActive(@PathVariable Long id) {
+        Optional<User> userOptional = userService.findById(id);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        userOptional.get().setStatus(Common.statusUser3);
+        userService.save(userOptional.get());
+        return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/changeStatusUserLock/{id}")
+    public ResponseEntity<User> changeStatusUserLock(@PathVariable Long id) {
+        Optional<User> userOptional = userService.findById(id);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        userOptional.get().setStatus(Common.statusUser1);
+        userService.save(userOptional.get());
+        return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/changeStatusUserBan/{id}")
+    public ResponseEntity<User> changeStatusUserBan(@PathVariable Long id) {
+        Optional<User> userOptional = userService.findById(id);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        userOptional.get().setStatus(Common.statusUser2);
+        userService.save(userOptional.get());
+        return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
+    }
 }
