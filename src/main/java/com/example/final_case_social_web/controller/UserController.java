@@ -1,10 +1,7 @@
 package com.example.final_case_social_web.controller;
 
 import com.example.final_case_social_web.common.Common;
-import com.example.final_case_social_web.model.JwtResponse;
-import com.example.final_case_social_web.model.Role;
-import com.example.final_case_social_web.model.User;
-import com.example.final_case_social_web.model.VerificationToken;
+import com.example.final_case_social_web.model.*;
 import com.example.final_case_social_web.service.RoleService;
 import com.example.final_case_social_web.service.UserService;
 import com.example.final_case_social_web.service.VerificationTokenService;
@@ -51,6 +48,12 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @GetMapping("/allUser")
+    public ResponseEntity<Iterable<User>> allUser() {
+        Iterable<User> users = userService.findAllUser();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
     @PostMapping("/register")
     public ResponseEntity<User> createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
@@ -81,6 +84,7 @@ public class UserController {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
+        user.setStatus(Common.statusUser3);
         userService.save(user);
         VerificationToken token = new VerificationToken(user);
         token.setExpiryDate(10);

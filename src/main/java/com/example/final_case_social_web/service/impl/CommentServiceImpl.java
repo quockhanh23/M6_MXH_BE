@@ -6,6 +6,7 @@ import com.example.final_case_social_web.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,12 +35,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Iterable<Comment> getCommentByIdUser(Long id) {
+    public List<Comment> getCommentByIdUser(Long id) {
         return commentRepository.getCommentByIdUser(id);
     }
 
     @Override
-    public Iterable<Comment> getCommentByIdPost(Long id) {
+    public List<Comment> getCommentByIdPost(Long id) {
         return commentRepository.getCommentByIdPost(id);
     }
 }

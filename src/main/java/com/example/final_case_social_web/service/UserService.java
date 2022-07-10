@@ -5,6 +5,7 @@ import com.example.final_case_social_web.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
@@ -27,4 +28,6 @@ public interface UserService extends UserDetailsService {
     boolean isRegister(User user);
 
     boolean isCorrectConfirmPassword(User user);
+
+    List<User> findAllUser();
 }

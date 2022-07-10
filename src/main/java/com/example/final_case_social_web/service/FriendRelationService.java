@@ -1,7 +1,6 @@
 package com.example.final_case_social_web.service;
 
 import com.example.final_case_social_web.model.FriendRelation;
-import com.example.final_case_social_web.service.GeneralService;
 
 import java.math.BigInteger;
 import java.util.List;

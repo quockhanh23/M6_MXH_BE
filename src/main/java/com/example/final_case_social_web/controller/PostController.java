@@ -1,15 +1,17 @@
 package com.example.final_case_social_web.controller;
 
 import com.example.final_case_social_web.common.Common;
-import com.example.final_case_social_web.model.*;
-import com.example.final_case_social_web.service.UserService;
-import com.example.final_case_social_web.service.PostService;
+import com.example.final_case_social_web.model.LikePost;
+import com.example.final_case_social_web.model.Post2;
+import com.example.final_case_social_web.model.User;
+import com.example.final_case_social_web.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -23,12 +25,38 @@ public class PostController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    LikePostService likePostService;
+
+    @Autowired
+    DisLikeService disLikeService;
+
+    @Autowired
+    CommentService commentService;
+
     @GetMapping("")
     public ResponseEntity<Iterable<Post2>> findAll() {
         Iterable<Post2> postIterable = postService.findAll();
         return new ResponseEntity<>(postIterable, HttpStatus.OK);
     }
 
+    @GetMapping("/allPostPublic")
+    public ResponseEntity<List<Post2>> allPostPublic() {
+        List<Post2> post2List = postService.allPost();
+        for (int i = 0; i < post2List.size(); i++) {
+            List<LikePost> likePost = likePostService.findAllLikeByPostId(post2List.get(i).getId());
+            post2List.get(i).setNumberLike(likePost.size());
+            postService.save(post2List.get(i));
+        }
+
+        return new ResponseEntity<>(post2List, HttpStatus.OK);
+    }
+
+    @GetMapping("/findAllPostByUser")
+    public ResponseEntity<List<Post2>> findAllPostByUser(@RequestParam Long id) {
+        List<Post2> post2List = postService.findAllPostByUser(id);
+        return new ResponseEntity<>(post2List, HttpStatus.OK);
+    }
 
     @PostMapping("/createPost")
     public ResponseEntity<Post2> createPost(@RequestBody Post2 post, @RequestParam Long idUser) {
@@ -36,6 +64,7 @@ public class PostController {
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
         post.setStatus(Common.statusPost1);
         post.setEditAt(null);
         post.setDelete(false);
@@ -50,8 +79,8 @@ public class PostController {
 
     @PutMapping("/updatePost")
     public ResponseEntity<Post2> update(@RequestParam Long idPost,
-                                       @RequestParam Long idUser,
-                                       @RequestBody Post2 post) {
+                                        @RequestParam Long idUser,
+                                        @RequestBody Post2 post) {
         Optional<Post2> postOptional = postService.findById(idPost);
         if (!postOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -71,7 +100,7 @@ public class PostController {
 
     @DeleteMapping("/changeStatusPublic")
     public ResponseEntity<Post2> changeStatusPublic(@RequestParam Long idPost,
-                                                   @RequestParam Long idUser) {
+                                                    @RequestParam Long idUser) {
         Optional<Post2> postOptional = postService.findById(idPost);
         if (!postOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -87,7 +116,7 @@ public class PostController {
 
     @DeleteMapping("/changeStatusPrivate")
     public ResponseEntity<Post2> changeStatus(@RequestParam Long idPost,
-                                             @RequestParam Long idUser) {
+                                              @RequestParam Long idUser) {
         Optional<Post2> postOptional = postService.findById(idPost);
         if (!postOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -103,7 +132,7 @@ public class PostController {
 
     @DeleteMapping("/changeStatusDelete")
     public ResponseEntity<Post2> delete(@RequestParam Long idPost,
-                                       @RequestParam Long idUser) {
+                                        @RequestParam Long idUser) {
         Optional<Post2> postOptional = postService.findById(idPost);
         if (!postOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

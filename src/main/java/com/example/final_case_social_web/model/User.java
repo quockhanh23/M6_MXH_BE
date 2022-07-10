@@ -47,8 +47,10 @@ public class User implements Serializable {
 
     private String address;
 
+    private String status;
 
-    public User(Long id, String username, String password, String confirmPassword, boolean enabled, Set<Role> roles, String fullName, String email, LocalDate dateOfBirth, String avatar, String address) {
+
+    public User(Long id, String username, String password, String confirmPassword, boolean enabled, Set<Role> roles, String fullName, String email, LocalDate dateOfBirth, String avatar, String address,String status) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -60,6 +62,7 @@ public class User implements Serializable {
         this.dateOfBirth = dateOfBirth;
         this.avatar = avatar;
         this.address = address;
+        this.status = status;
     }
 
     public User(String username, String password, String confirmPassword, boolean enabled, Set<Role> roles, String fullName, String email, LocalDate dateOfBirth, String avatar, String address) {

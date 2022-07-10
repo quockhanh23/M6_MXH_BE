@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +31,7 @@ public class ReflectRestController {
     @Autowired
     PostService postService;
 
-    // Xem like
+    // Xem like của post
     @GetMapping("/getAllLike")
     public ResponseEntity<List<LikePost>> getAllLike(@RequestParam Long idPost) {
         if (idPost == null) {
@@ -43,7 +44,7 @@ public class ReflectRestController {
         return new ResponseEntity<>(likePosts, HttpStatus.OK);
     }
 
-    // Xem dislike
+    // Xem dislike của post
     @GetMapping("/getAllDisLike")
     public ResponseEntity<Iterable<DisLike>> getAllDisLike(@RequestParam Long idPost) {
         if (idPost == null) {
@@ -73,13 +74,7 @@ public class ReflectRestController {
         if (!postOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Iterable<DisLike> disLikes = disLikeService.findAll();
-        for (DisLike disLike : disLikes) {
-            if (disLike.getUserDisLike().getId().equals(idUser)) {
-                disLike.setUserDisLike(null);
-                disLikeService.save(disLike);
-            }
-        }
+
         likePost.setUserLike(userOptional.get());
         likePost.setCreateAt(new Date());
         likePost.setPost(postOptional.get());

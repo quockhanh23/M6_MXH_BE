@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -28,6 +29,19 @@ public class CommentRestController {
     private UserService userService;
     @Autowired
     private PostService postService;
+
+
+    @GetMapping("/all")
+    public ResponseEntity<Iterable<Comment>> allComment() {
+        Iterable<Comment> commentList = commentService.findAll();
+        return new ResponseEntity<>(commentList, HttpStatus.OK);
+    }
+
+    @GetMapping("/allComment")
+    public ResponseEntity<List<Comment>> allCommentById(@RequestParam Long id) {
+        List<Comment> commentList = commentService.getCommentByIdPost(id);
+        return new ResponseEntity<>(commentList, HttpStatus.OK);
+    }
 
     @PostMapping("/createComment")
     public ResponseEntity<Comment> creatComment(@RequestBody Comment comment,

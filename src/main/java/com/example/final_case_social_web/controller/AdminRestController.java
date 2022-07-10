@@ -3,6 +3,7 @@ package com.example.final_case_social_web.controller;
 import com.example.final_case_social_web.model.Comment;
 import com.example.final_case_social_web.model.User;
 import com.example.final_case_social_web.service.CommentService;
+import com.example.final_case_social_web.service.PostService;
 import com.example.final_case_social_web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -23,6 +24,9 @@ public class AdminRestController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PostService postService;
 
     @GetMapping("/getAllUser")
     public ResponseEntity<Iterable<User>> getAllUser() {
