@@ -29,7 +29,7 @@ public class PostController {
     LikePostService likePostService;
 
     @Autowired
-    DisLikeService disLikeService;
+    DisLikePostService disLikePostService;
 
     @Autowired
     CommentService commentService;

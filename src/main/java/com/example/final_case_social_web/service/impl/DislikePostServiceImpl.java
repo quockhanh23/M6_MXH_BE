@@ -1,8 +1,8 @@
 package com.example.final_case_social_web.service.impl;
 
-import com.example.final_case_social_web.model.DisLike;
+import com.example.final_case_social_web.model.DisLikePost;
 import com.example.final_case_social_web.repository.DisLikeRepository;
-import com.example.final_case_social_web.service.DisLikeService;
+import com.example.final_case_social_web.service.DisLikePostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,23 +10,23 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DislikeServiceImpl implements DisLikeService {
+public class DislikePostServiceImpl implements DisLikePostService {
     @Autowired
     private DisLikeRepository disLikeRepository;
 
     @Override
-    public Iterable<DisLike> findAll() {
+    public Iterable<DisLikePost> findAll() {
         return disLikeRepository.findAll();
     }
 
     @Override
-    public Optional<DisLike> findById(Long id) {
+    public Optional<DisLikePost> findById(Long id) {
         return disLikeRepository.findById(id);
     }
 
     @Override
-    public DisLike save(DisLike disLike) {
-        return disLikeRepository.save(disLike);
+    public DisLikePost save(DisLikePost disLikePost) {
+        return disLikeRepository.save(disLikePost);
     }
 
     @Override
@@ -35,12 +35,12 @@ public class DislikeServiceImpl implements DisLikeService {
     }
 
     @Override
-    public List<DisLike> findDisLike(Long idPost, Long idUser) {
+    public List<DisLikePost> findDisLike(Long idPost, Long idUser) {
         return disLikeRepository.findDisLike(idPost, idUser);
     }
 
     @Override
-    public List<DisLike> findAllDisLikeByPostId(Long idPost) {
+    public List<DisLikePost> findAllDisLikeByPostId(Long idPost) {
         return disLikeRepository.findAllDisLikeByPostId(idPost);
     }
 }

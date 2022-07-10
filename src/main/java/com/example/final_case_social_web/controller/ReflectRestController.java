@@ -1,7 +1,7 @@
 package com.example.final_case_social_web.controller;
 
 import com.example.final_case_social_web.model.*;
-import com.example.final_case_social_web.service.DisLikeService;
+import com.example.final_case_social_web.service.DisLikePostService;
 import com.example.final_case_social_web.service.PostService;
 import com.example.final_case_social_web.service.LikePostService;
 import com.example.final_case_social_web.service.UserService;
@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +24,7 @@ public class ReflectRestController {
     @Autowired
     private LikePostService likePostService;
     @Autowired
-    private DisLikeService disLikeService;
+    private DisLikePostService disLikePostService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -46,15 +45,15 @@ public class ReflectRestController {
 
     // Xem dislike của post
     @GetMapping("/getAllDisLike")
-    public ResponseEntity<Iterable<DisLike>> getAllDisLike(@RequestParam Long idPost) {
+    public ResponseEntity<Iterable<DisLikePost>> getAllDisLike(@RequestParam Long idPost) {
         if (idPost == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        List<DisLike> disLikes = disLikeService.findAllDisLikeByPostId(idPost);
-        if (disLikes.size() == 0) {
+        List<DisLikePost> disLikePosts = disLikePostService.findAllDisLikeByPostId(idPost);
+        if (disLikePosts.size() == 0) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(disLikes, HttpStatus.OK);
+        return new ResponseEntity<>(disLikePosts, HttpStatus.OK);
     }
 
     // Tạo like
@@ -84,11 +83,11 @@ public class ReflectRestController {
 
     // Tạo dislike
     @PostMapping("/createDisLike")
-    public ResponseEntity<DisLike> createDisLike(@RequestBody DisLike disLike,
-                                                 @RequestParam Long idPost,
-                                                 @RequestParam Long idUser) {
-        List<DisLike> disLikes = disLikeService.findDisLike(idPost, idUser);
-        if (disLikes.size() == 1) {
+    public ResponseEntity<DisLikePost> createDisLike(@RequestBody DisLikePost disLikePost,
+                                                     @RequestParam Long idPost,
+                                                     @RequestParam Long idUser) {
+        List<DisLikePost> disLikePosts = disLikePostService.findDisLike(idPost, idUser);
+        if (disLikePosts.size() == 1) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         Optional<User> userOptional = userService.findById(idUser);
@@ -106,10 +105,10 @@ public class ReflectRestController {
                 likePostService.save(likePost);
             }
         }
-        disLike.setUserDisLike(userOptional.get());
-        disLike.setCreateAt(new Date());
-        disLike.setPost(postOptional.get());
-        disLikeService.save(disLike);
-        return new ResponseEntity<>(disLike, HttpStatus.OK);
+        disLikePost.setUserDisLike(userOptional.get());
+        disLikePost.setCreateAt(new Date());
+        disLikePost.setPost(postOptional.get());
+        disLikePostService.save(disLikePost);
+        return new ResponseEntity<>(disLikePost, HttpStatus.OK);
     }
 }

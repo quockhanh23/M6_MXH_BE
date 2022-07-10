@@ -11,7 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class DisLike {
+public class DisLikePost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
