@@ -24,7 +24,6 @@ public class CommentRestController {
 
     @Autowired
     private CommentService commentService;
-
     @Autowired
     private UserService userService;
     @Autowired

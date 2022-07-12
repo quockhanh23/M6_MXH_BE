@@ -127,9 +127,9 @@ public class UserController {
             if (userList.get(i).getStatus().equals(Constants.statusUser2)) {
                 if (userList.get(i).getUsername().equals(user.getUsername())
                         && passwordEncoder.matches(user.getPassword(), userList.get(i).getPassword())) {
-                    log.info(LogMessage.logMessage4);
-                    log.info(LogMessage.logMessageUserStatus);
-                    log.info(LogMessage.logMessage4);
+                    log.info(LogMessage.logMessageStrikeThrough);
+                    log.info(LogMessage.logMessageLoginUser);
+                    log.info(LogMessage.logMessageStrikeThrough);
                     return new ResponseEntity<>(HttpStatus.LOCKED);
                 }
             }

@@ -24,10 +24,8 @@ public class PostController {
 
     @Autowired
     PostService postService;
-
     @Autowired
     UserService userService;
-
     @Autowired
     LikePostService likePostService;
 
@@ -65,9 +63,9 @@ public class PostController {
     public ResponseEntity<Post2> createPost(@RequestBody Post2 post, @RequestParam Long idUser) {
         Optional<User> userOptional = userService.findById(idUser);
         if (!userOptional.isPresent()) {
-            log.warn(LogMessage.logMessage4);
+            log.warn(LogMessage.logMessageStrikeThrough);
             log.warn("Không tìm thấy User");
-            log.warn(LogMessage.logMessage4);
+            log.warn(LogMessage.logMessageStrikeThrough);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 

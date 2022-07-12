@@ -19,9 +19,9 @@ import java.util.List;
 @CrossOrigin("*")
 @RequestMapping("/api/admins")
 public class AdminRestController {
+
     @Autowired
     private CommentService commentService;
-
     @Autowired
     private UserService userService;
 
