@@ -41,22 +41,4 @@ public class AdminRestController {
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
-
-    @GetMapping("/getAllCommentByIdUser")
-    public ResponseEntity<Iterable<Comment>> getAllCommentByIdUser(@RequestParam Long id) {
-        Iterable<Comment> commentIterable = commentService.getCommentByIdUser(id);
-        if (!commentIterable.iterator().hasNext()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(commentIterable, HttpStatus.OK);
-    }
-
-    @GetMapping("/getAllCommentByIdPost")
-    public ResponseEntity<Iterable<Comment>> getAllCommentByIdPost(@RequestParam Long id) {
-        Iterable<Comment> commentIterable = commentService.getCommentByIdPost(id);
-        if (!commentIterable.iterator().hasNext()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(commentIterable, HttpStatus.OK);
-    }
 }

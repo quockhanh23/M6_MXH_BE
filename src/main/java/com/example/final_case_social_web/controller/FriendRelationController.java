@@ -1,6 +1,6 @@
 package com.example.final_case_social_web.controller;
 
-import com.example.final_case_social_web.common.Common;
+import com.example.final_case_social_web.common.Constants;
 import com.example.final_case_social_web.model.FriendRelation;
 import com.example.final_case_social_web.model.User;
 import com.example.final_case_social_web.service.UserService;
@@ -52,12 +52,12 @@ public class FriendRelationController {
         if (!optionalFriendRelation.isPresent()) {
             FriendRelation friendRelation1 = new FriendRelation();
             friendRelation1.setIdFriend(idFriend);
-            friendRelation1.setStatus(Common.statusFriend3);
+            friendRelation1.setStatus(Constants.statusFriend3);
             friendRelation1.setIdUser(idUser);
             friendRelationService.save(friendRelation1);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            optionalFriendRelation.get().setStatus(Common.statusFriend3);
+            optionalFriendRelation.get().setStatus(Constants.statusFriend3);
             friendRelationService.save(optionalFriendRelation.get());
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -70,12 +70,12 @@ public class FriendRelationController {
         if (!optionalFriendRelation.isPresent()) {
             FriendRelation friendRelation1 = new FriendRelation();
             friendRelation1.setIdFriend(idFriend);
-            friendRelation1.setStatus(Common.statusFriend1);
+            friendRelation1.setStatus(Constants.statusFriend1);
             friendRelation1.setIdUser(idUser);
             friendRelationService.save(friendRelation1);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            optionalFriendRelation.get().setStatus(Common.statusFriend1);
+            optionalFriendRelation.get().setStatus(Constants.statusFriend1);
             friendRelationService.save(optionalFriendRelation.get());
             return new ResponseEntity<>(HttpStatus.OK);
         }

@@ -1,10 +1,12 @@
 package com.example.final_case_social_web.controller;
 
-import com.example.final_case_social_web.common.Common;
+import com.example.final_case_social_web.common.Constants;
+import com.example.final_case_social_web.common.LogMessage;
 import com.example.final_case_social_web.model.LikePost;
 import com.example.final_case_social_web.model.Post2;
 import com.example.final_case_social_web.model.User;
 import com.example.final_case_social_web.service.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.Optional;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/posts")
+@Slf4j
 public class PostController {
 
     @Autowired
@@ -62,10 +65,13 @@ public class PostController {
     public ResponseEntity<Post2> createPost(@RequestBody Post2 post, @RequestParam Long idUser) {
         Optional<User> userOptional = userService.findById(idUser);
         if (!userOptional.isPresent()) {
+            log.warn(LogMessage.logMessage4);
+            log.warn("Không tìm thấy User");
+            log.warn(LogMessage.logMessage4);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        post.setStatus(Common.statusPost1);
+        post.setStatus(Constants.statusPost1);
         post.setEditAt(null);
         post.setDelete(false);
         post.setUser(userOptional.get());
@@ -109,7 +115,7 @@ public class PostController {
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        postOptional.get().setStatus(Common.statusPost1);
+        postOptional.get().setStatus(Constants.statusPost1);
         postService.save(postOptional.get());
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -125,7 +131,7 @@ public class PostController {
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        postOptional.get().setStatus(Common.statusPost2);
+        postOptional.get().setStatus(Constants.statusPost2);
         postService.save(postOptional.get());
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -141,7 +147,7 @@ public class PostController {
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        postOptional.get().setStatus(Common.statusPost3);
+        postOptional.get().setStatus(Constants.statusPost3);
         postOptional.get().setDelete(true);
         postService.save(postOptional.get());
         return new ResponseEntity<>(HttpStatus.OK);

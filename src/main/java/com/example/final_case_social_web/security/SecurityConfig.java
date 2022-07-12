@@ -74,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic().authenticationEntryPoint(restServicesEntryPoint());
         http.authorizeRequests()
                 .antMatchers("/register", "/login", "/api/posts/**", "/posts/**", "/api/relationships/**", "/users/**", "/**", "/api/friends/**").permitAll()
-//                .antMatchers("quizzes/**","accounts/**","answers/**","categories/**","results/**","tests/**").access("hasRole('ROLE_USER')")
+
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
@@ -84,5 +84,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.cors();
     }
-
 }

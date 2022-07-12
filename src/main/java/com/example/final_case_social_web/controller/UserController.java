@@ -1,11 +1,16 @@
 package com.example.final_case_social_web.controller;
 
-import com.example.final_case_social_web.common.Common;
-import com.example.final_case_social_web.model.*;
+import com.example.final_case_social_web.common.Constants;
+import com.example.final_case_social_web.common.LogMessage;
+import com.example.final_case_social_web.model.JwtResponse;
+import com.example.final_case_social_web.model.Role;
+import com.example.final_case_social_web.model.User;
+import com.example.final_case_social_web.model.VerificationToken;
 import com.example.final_case_social_web.service.RoleService;
 import com.example.final_case_social_web.service.UserService;
 import com.example.final_case_social_web.service.VerificationTokenService;
 import com.example.final_case_social_web.service.impl.JwtService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
@@ -20,14 +25,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @PropertySource("classpath:application.properties")
 @CrossOrigin("*")
 @RequestMapping("/api")
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -80,11 +84,20 @@ public class UserController {
             user.setRoles(roles1);
         }
         if (user.getAvatar().equals("assets/images/defaultAva.png")) {
-            user.setAvatar(Common.defaultImage);
+            user.setAvatar(Constants.defaultImageAvatar);
+        }
+        if (user.getGender().equals("Nữ")) {
+            user.setAvatar(Constants.defaultImageAvatarGirl);
+        }
+        if (user.getGender().equals("")) {
+            user.setGender(Constants.genderDefault);
+        }
+        if (user.getGender().equals(Constants.genderDefault)) {
+            user.setAvatar("https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
-        user.setStatus(Common.statusUser3);
+        user.setStatus(Constants.statusUser3);
         userService.save(user);
         VerificationToken token = new VerificationToken(user);
         token.setExpiryDate(10);
@@ -107,6 +120,20 @@ public class UserController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        Iterable<User> list = userService.findAll();
+        List<User> userList = new ArrayList<>();
+        userList = (List<User>) list;
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getStatus().equals(Constants.statusUser2)) {
+                if (userList.get(i).getUsername().equals(user.getUsername())
+                        && passwordEncoder.matches(user.getPassword(), userList.get(i).getPassword())) {
+                    log.info(LogMessage.logMessage4);
+                    log.info(LogMessage.logMessageUserStatus);
+                    log.info(LogMessage.logMessage4);
+                    return new ResponseEntity<>(HttpStatus.LOCKED);
+                }
+            }
+        }
         String jwt = jwtService.generateTokenLogin(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
@@ -149,7 +176,7 @@ public class UserController {
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        userOptional.get().setStatus(Common.statusUser3);
+        userOptional.get().setStatus(Constants.statusUser3);
         userService.save(userOptional.get());
         return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
     }
@@ -160,7 +187,7 @@ public class UserController {
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        userOptional.get().setStatus(Common.statusUser1);
+        userOptional.get().setStatus(Constants.statusUser1);
         userService.save(userOptional.get());
         return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
     }
@@ -171,7 +198,7 @@ public class UserController {
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        userOptional.get().setStatus(Common.statusUser2);
+        userOptional.get().setStatus(Constants.statusUser2);
         userService.save(userOptional.get());
         return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
     }

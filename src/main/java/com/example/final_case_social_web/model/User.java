@@ -1,18 +1,19 @@
 package com.example.final_case_social_web.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Past;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Table(name = "userTable")
 public class User implements Serializable {
@@ -33,7 +34,6 @@ public class User implements Serializable {
 
     private String fullName;
     private String email;
-
     private String phone;
     private String favorite;
 
@@ -49,8 +49,10 @@ public class User implements Serializable {
 
     private String status;
 
+    private String gender;
 
-    public User(Long id, String username, String password, String confirmPassword, boolean enabled, Set<Role> roles, String fullName, String email, LocalDate dateOfBirth, String avatar, String address,String status) {
+
+    public User(Long id, String username, String password, String confirmPassword, boolean enabled, Set<Role> roles, String fullName, String email, LocalDate dateOfBirth, String avatar, String address, String status) {
         this.id = id;
         this.username = username;
         this.password = password;
