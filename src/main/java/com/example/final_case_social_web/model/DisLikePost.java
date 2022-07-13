@@ -11,6 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "dis_like")
 public class DisLikePost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

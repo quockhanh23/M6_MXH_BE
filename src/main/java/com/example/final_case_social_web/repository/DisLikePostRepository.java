@@ -10,12 +10,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DisLikeRepository extends JpaRepository<DisLikePost, Long> {
+public interface DisLikePostRepository extends JpaRepository<DisLikePost, Long> {
     @Modifying
     @Query(value = "select * from dis_like where post_id = :idPost and user_id = :idUser", nativeQuery = true)
     List<DisLikePost> findDisLike (@Param("idPost")Long idPost, @Param("idUser") Long idUser);
 
     @Modifying
-    @Query(value = "select * from dis_like where post_id = :idPost user_id is not null", nativeQuery = true)
+    @Query(value = "select * from dis_like where post_id = :idPost and user_id is not null", nativeQuery = true)
     List<DisLikePost> findAllDisLikeByPostId (@Param("idPost")Long idPost);
 }

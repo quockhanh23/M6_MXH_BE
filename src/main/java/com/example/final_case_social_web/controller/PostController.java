@@ -2,6 +2,7 @@ package com.example.final_case_social_web.controller;
 
 import com.example.final_case_social_web.common.Constants;
 import com.example.final_case_social_web.common.LogMessage;
+import com.example.final_case_social_web.model.DisLikePost;
 import com.example.final_case_social_web.model.LikePost;
 import com.example.final_case_social_web.model.Post2;
 import com.example.final_case_social_web.model.User;
@@ -47,9 +48,10 @@ public class PostController {
         for (int i = 0; i < post2List.size(); i++) {
             List<LikePost> likePost = likePostService.findAllLikeByPostId(post2List.get(i).getId());
             post2List.get(i).setNumberLike(likePost.size());
+            List<DisLikePost> disLikePosts = disLikePostService.findAllDisLikeByPostId(post2List.get(i).getId());
+            post2List.get(i).setNumberDisLike(disLikePosts.size());
             postService.save(post2List.get(i));
         }
-
         return new ResponseEntity<>(post2List, HttpStatus.OK);
     }
 
@@ -68,7 +70,6 @@ public class PostController {
             log.warn(LogMessage.logMessageStrikeThrough);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         post.setStatus(Constants.statusPost1);
         post.setEditAt(null);
         post.setDelete(false);

@@ -5,26 +5,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Comment {
+public class ShortNews {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 500)
-    private String content;
-    private LocalDateTime createAt;
-    private LocalDateTime editAt;
-    private boolean isDelete;
-    private LocalDateTime deleteAt;
+    private String name;
+    private Date createAt;
+    private Date expired;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post2 post;
 }

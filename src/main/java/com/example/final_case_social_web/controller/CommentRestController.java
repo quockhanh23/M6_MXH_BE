@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +58,7 @@ public class CommentRestController {
         if (comment.getContent() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        comment.setCreateAt(new Date());
+        comment.setCreateAt(LocalDateTime.now());
         comment.setDelete(false);
         comment.setPost(post2Optional.get());
         comment.setEditAt(null);
@@ -84,7 +85,7 @@ public class CommentRestController {
         }
         if ((userOptional.get().getId().equals(commentOptional.get().getUser().getId())) ||
                 (userOptional.get().getId().equals(commentOptional.get().getPost().getUser().getId()))) {
-            commentOptional.get().setDeleteAt(new Date());
+            commentOptional.get().setDeleteAt(LocalDateTime.now());
             commentOptional.get().setDelete(true);
             commentService.save(commentOptional.get());
             return new ResponseEntity<>(commentOptional.get(), HttpStatus.OK);

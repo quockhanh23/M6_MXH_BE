@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -75,7 +76,7 @@ public class ReflectRestController {
         }
 
         likePost.setUserLike(userOptional.get());
-        likePost.setCreateAt(new Date());
+        likePost.setCreateAt(LocalDateTime.now());
         likePost.setPost(postOptional.get());
         likePostService.save(likePost);
         return new ResponseEntity<>(likePost, HttpStatus.OK);
@@ -98,13 +99,7 @@ public class ReflectRestController {
         if (!postOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Iterable<LikePost> likePosts = likePostService.findAll();
-        for (LikePost likePost : likePosts) {
-            if (likePost.getUserLike().getId().equals(idUser)) {
-                likePost.setUserLike(null);
-                likePostService.save(likePost);
-            }
-        }
+
         disLikePost.setUserDisLike(userOptional.get());
         disLikePost.setCreateAt(new Date());
         disLikePost.setPost(postOptional.get());
