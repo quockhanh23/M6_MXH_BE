@@ -18,4 +18,6 @@ public interface DisLikePostRepository extends JpaRepository<DisLikePost, Long> 
     @Modifying
     @Query(value = "select * from dis_like where post_id = :idPost and user_id is not null", nativeQuery = true)
     List<DisLikePost> findAllDisLikeByPostId (@Param("idPost")Long idPost);
+
+    void delete(DisLikePost entity);
 }

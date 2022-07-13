@@ -40,9 +40,10 @@ public class User implements Serializable {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Past(message = "Phải là ngày trong quá khứ")
     private LocalDate dateOfBirth;
-
+    @Column(length = 1000)
     private String avatar = "assets/images/defaultAva.png";
 
+    @Column(length = 1000)
     private String cover = "assets/images/face-map_ccexpress.png";
 
     private String address;

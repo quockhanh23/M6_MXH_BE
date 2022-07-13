@@ -31,7 +31,7 @@ public class LikePostServiceImpl implements LikePostService {
 
     @Override
     public void remove(Long id) {
-
+        likePostRepository.deleteById(id);
     }
 
     @Override
@@ -42,5 +42,10 @@ public class LikePostServiceImpl implements LikePostService {
     @Override
     public List<LikePost> findAllLikeByPostId(Long idPost) {
         return likePostRepository.findAllLikeByPostId(idPost);
+    }
+
+    @Override
+    public void delete(LikePost entity) {
+        likePostRepository.delete(entity);
     }
 }

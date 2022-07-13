@@ -6,12 +6,11 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Comment {
+public class AnswerComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,9 +22,9 @@ public class Comment {
     private LocalDateTime deleteAt;
     private String image;
     @ManyToOne
+    @JoinColumn(name = "comment_id")
+    private Comment comment;
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post2 post;
 }

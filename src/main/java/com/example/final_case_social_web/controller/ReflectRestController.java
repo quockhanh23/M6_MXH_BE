@@ -64,6 +64,7 @@ public class ReflectRestController {
                                                @RequestParam Long idUser) {
         List<LikePost> likePostIterable = likePostService.findLike(idPost, idUser);
         if (likePostIterable.size() == 1) {
+            likePostService.delete(likePostIterable.get(0));
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         Optional<User> userOptional = userService.findById(idUser);
@@ -89,8 +90,11 @@ public class ReflectRestController {
                                                      @RequestParam Long idUser) {
         List<DisLikePost> disLikePosts = disLikePostService.findDisLike(idPost, idUser);
         if (disLikePosts.size() == 1) {
+            disLikePosts.get(0).setUserDisLike(null);
+            disLikePostService.save(disLikePosts.get(0));
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+
         Optional<User> userOptional = userService.findById(idUser);
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -105,5 +109,7 @@ public class ReflectRestController {
         disLikePost.setPost(postOptional.get());
         disLikePostService.save(disLikePost);
         return new ResponseEntity<>(disLikePost, HttpStatus.OK);
+
+
     }
 }

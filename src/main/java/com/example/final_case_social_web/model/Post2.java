@@ -21,7 +21,7 @@ public class Post2 {
     private boolean isDelete;
     private int numberLike;
     private int numberDisLike;
-
+    private String image;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
