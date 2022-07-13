@@ -12,11 +12,11 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post2,Long> {
     Iterable<Post2> findByStatusContaining (String status);
+    List<Post2> findAllByContentContaining (String content);
 
     @Modifying
     @Query(value = "select * from post2 where user_id = :id and is_delete = false order by create_at desc", nativeQuery = true)
     List<Post2> findAllPostByUser (@Param("id")Long id);
-
 
     @Modifying
     @Query(value = "select * from post2 where is_delete = false and status like 'Public' order by create_at desc", nativeQuery = true)

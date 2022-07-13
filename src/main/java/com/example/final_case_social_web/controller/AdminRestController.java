@@ -4,6 +4,7 @@ import com.example.final_case_social_web.model.User;
 import com.example.final_case_social_web.service.CommentService;
 import com.example.final_case_social_web.service.PostService;
 import com.example.final_case_social_web.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.util.List;
 @PropertySource("classpath:application.properties")
 @CrossOrigin("*")
 @RequestMapping("/api/admins")
+@Slf4j
 public class AdminRestController {
 
     @Autowired

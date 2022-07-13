@@ -3,8 +3,9 @@ package com.example.final_case_social_web.controller;
 import com.example.final_case_social_web.common.Constants;
 import com.example.final_case_social_web.model.FriendRelation;
 import com.example.final_case_social_web.model.User;
-import com.example.final_case_social_web.service.UserService;
 import com.example.final_case_social_web.service.FriendRelationService;
+import com.example.final_case_social_web.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.Optional;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/friends")
+@Slf4j
 public class FriendRelationController {
 
     @Autowired

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentPost {
+public class CommentPostDTO {
     private Post2 post2;
     private Comment comment;
 }

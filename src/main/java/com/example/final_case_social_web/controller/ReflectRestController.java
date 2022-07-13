@@ -1,10 +1,11 @@
 package com.example.final_case_social_web.controller;
 
-import com.example.final_case_social_web.model.*;
-import com.example.final_case_social_web.service.DisLikePostService;
-import com.example.final_case_social_web.service.PostService;
-import com.example.final_case_social_web.service.LikePostService;
-import com.example.final_case_social_web.service.UserService;
+import com.example.final_case_social_web.model.DisLikePost;
+import com.example.final_case_social_web.model.LikePost;
+import com.example.final_case_social_web.model.Post2;
+import com.example.final_case_social_web.model.User;
+import com.example.final_case_social_web.service.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import java.util.Optional;
 @PropertySource("classpath:application.properties")
 @CrossOrigin("*")
 @RequestMapping("/api/refs")
+@Slf4j
 public class ReflectRestController {
     @Autowired
     private LikePostService likePostService;
@@ -30,6 +32,12 @@ public class ReflectRestController {
     private UserService userService;
     @Autowired
     PostService postService;
+
+    @Autowired
+    LikeCommentService likeCommentService;
+
+    @Autowired
+    DisLikeCommentService disLikeCommentService;
 
     // Xem like của post
     @GetMapping("/getAllLike")
@@ -57,7 +65,7 @@ public class ReflectRestController {
         return new ResponseEntity<>(disLikePosts, HttpStatus.OK);
     }
 
-    // Tạo like
+    // Tạo like nếu đã like sẽ unlike
     @PostMapping("/createLike")
     public ResponseEntity<LikePost> createLike(@RequestBody LikePost likePost,
                                                @RequestParam Long idPost,
@@ -83,7 +91,7 @@ public class ReflectRestController {
         return new ResponseEntity<>(likePost, HttpStatus.OK);
     }
 
-    // Tạo dislike
+    // Tạo dislike nếu đã dislike sẽ undislike
     @PostMapping("/createDisLike")
     public ResponseEntity<DisLikePost> createDisLike(@RequestBody DisLikePost disLikePost,
                                                      @RequestParam Long idPost,
@@ -109,7 +117,5 @@ public class ReflectRestController {
         disLikePost.setPost(postOptional.get());
         disLikePostService.save(disLikePost);
         return new ResponseEntity<>(disLikePost, HttpStatus.OK);
-
-
     }
 }

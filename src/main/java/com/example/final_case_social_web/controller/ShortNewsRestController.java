@@ -2,6 +2,8 @@ package com.example.final_case_social_web.controller;
 
 import com.example.final_case_social_web.model.ShortNews;
 import com.example.final_case_social_web.service.ShortNewsService;
+import com.example.final_case_social_web.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
@@ -15,9 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 @PropertySource("classpath:application.properties")
 @CrossOrigin("*")
 @RequestMapping("/api/news")
+@Slf4j
 public class ShortNewsRestController {
     @Autowired
     private ShortNewsService shortNewsService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/all")
     public ResponseEntity<Iterable<ShortNews>> allShortNews() {

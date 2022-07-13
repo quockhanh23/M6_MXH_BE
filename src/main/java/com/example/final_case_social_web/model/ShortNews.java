@@ -18,6 +18,8 @@ public class ShortNews {
     private String name;
     private Date createAt;
     private Date expired;
+    @Column(length = 1000)
+    private String image;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
