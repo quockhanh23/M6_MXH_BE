@@ -2,10 +2,7 @@ package com.example.final_case_social_web.controller;
 
 import com.example.final_case_social_web.common.Constants;
 import com.example.final_case_social_web.common.LogMessage;
-import com.example.final_case_social_web.model.DisLikePost;
-import com.example.final_case_social_web.model.LikePost;
-import com.example.final_case_social_web.model.Post2;
-import com.example.final_case_social_web.model.User;
+import com.example.final_case_social_web.model.*;
 import com.example.final_case_social_web.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +21,20 @@ import java.util.Optional;
 public class PostController {
 
     @Autowired
-    PostService postService;
+    private PostService postService;
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    LikePostService likePostService;
+    private LikePostService likePostService;
 
     @Autowired
-    DisLikePostService disLikePostService;
+    private DisLikePostService disLikePostService;
 
     @Autowired
-    CommentService commentService;
+    private IconHeartService iconHeartService;
+
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping("")
     public ResponseEntity<Iterable<Post2>> findAll() {
@@ -47,9 +47,11 @@ public class PostController {
         List<Post2> post2List = postService.allPost();
         for (int i = 0; i < post2List.size(); i++) {
             List<LikePost> likePost = likePostService.findAllLikeByPostId(post2List.get(i).getId());
-            post2List.get(i).setNumberLike(likePost.size());
+            post2List.get(i).setNumberLike((long) likePost.size());
             List<DisLikePost> disLikePosts = disLikePostService.findAllDisLikeByPostId(post2List.get(i).getId());
-            post2List.get(i).setNumberDisLike(disLikePosts.size());
+            post2List.get(i).setNumberDisLike((long) disLikePosts.size());
+            List<IconHeart> iconHearts = iconHeartService.findAllHeartByPostId(post2List.get(i).getId());
+            post2List.get(i).setIconHeart((long) iconHearts.size());
             postService.save(post2List.get(i));
         }
         return new ResponseEntity<>(post2List, HttpStatus.OK);

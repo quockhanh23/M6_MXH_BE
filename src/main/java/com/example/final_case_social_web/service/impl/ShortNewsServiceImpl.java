@@ -28,8 +28,4 @@ public class ShortNewsServiceImpl implements ShortNewsService {
         return shortNewsRepository.save(shortNews);
     }
 
-    @Override
-    public void remove(Long id) {
-        shortNewsRepository.deleteById(id);
-    }
 }

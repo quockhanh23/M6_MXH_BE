@@ -30,8 +30,4 @@ public class AccountServiceImpl implements GeneralService<User> {
         return userRepository.save(user);
     }
 
-    @Override
-    public void remove(Long id) {
-        userRepository.deleteById(id);
-    }
 }

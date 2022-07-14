@@ -9,5 +9,11 @@ import java.util.Optional;
 public interface DisLikeCommentService {
     Optional<DisLikeComment> findById(Long id);
 
-    List<DisLikeComment> findDisLikeComment (@Param("idComment")Long idComment, @Param("idUser") Long idUser);
+    List<DisLikeComment> findDisLikeComment(@Param("idComment") Long idComment, @Param("idUser") Long idUser);
+
+    List<DisLikeComment> findAllDisLikeCommentByPostId(@Param("idComment") Long idComment);
+
+    void delete(DisLikeComment entity);
+
+    DisLikeComment save(DisLikeComment disLikeComment);
 }

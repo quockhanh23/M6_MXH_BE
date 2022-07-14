@@ -28,8 +28,4 @@ public class AnswerCommentServiceImpl implements AnswerCommentService {
         return answerCommentRepository.save(answerComment);
     }
 
-    @Override
-    public void remove(Long id) {
-        answerCommentRepository.deleteById(id);
-    }
 }

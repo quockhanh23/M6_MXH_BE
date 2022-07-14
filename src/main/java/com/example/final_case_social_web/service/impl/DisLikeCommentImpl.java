@@ -24,4 +24,19 @@ public class DisLikeCommentImpl implements DisLikeCommentService {
     public List<DisLikeComment> findDisLikeComment(Long idComment, Long idUser) {
         return disLikeCommentRepository.findDisLikeComment(idComment, idUser);
     }
+
+    @Override
+    public List<DisLikeComment> findAllDisLikeCommentByPostId(Long idPost) {
+        return disLikeCommentRepository.findAllDisLikeCommentByPostId(idPost);
+    }
+
+    @Override
+    public void delete(DisLikeComment entity) {
+        disLikeCommentRepository.delete(entity);
+    }
+
+    @Override
+    public DisLikeComment save(DisLikeComment disLikeComment) {
+        return disLikeCommentRepository.save(disLikeComment);
+    }
 }

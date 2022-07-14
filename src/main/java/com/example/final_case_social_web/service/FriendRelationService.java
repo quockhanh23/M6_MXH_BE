@@ -16,4 +16,6 @@ public interface FriendRelationService extends GeneralService<FriendRelation> {
     Iterable<BigInteger> findIdFriend(Long idUser);
 
     List<FriendRelation> findAllListRequestAddFriendById(Long idUser);
+
+    void remove(Long id);
 }

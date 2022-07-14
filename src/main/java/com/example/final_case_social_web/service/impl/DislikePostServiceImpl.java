@@ -30,11 +30,6 @@ public class DislikePostServiceImpl implements DisLikePostService {
     }
 
     @Override
-    public void remove(Long id) {
-
-    }
-
-    @Override
     public List<DisLikePost> findDisLike(Long idPost, Long idUser) {
         return disLikeRepository.findDisLike(idPost, idUser);
     }

@@ -23,6 +23,8 @@ public class Comment {
     private LocalDateTime deleteAt;
     @Column(length = 1000)
     private String image;
+    private Long numberLike;
+    private Long numberDisLike;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

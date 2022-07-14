@@ -1,9 +1,6 @@
 package com.example.final_case_social_web.controller;
 
-import com.example.final_case_social_web.model.DisLikePost;
-import com.example.final_case_social_web.model.LikePost;
-import com.example.final_case_social_web.model.Post2;
-import com.example.final_case_social_web.model.User;
+import com.example.final_case_social_web.model.*;
 import com.example.final_case_social_web.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +36,12 @@ public class ReflectRestController {
     @Autowired
     DisLikeCommentService disLikeCommentService;
 
+    @Autowired
+    IconHeartService iconHeartService;
+
+    @Autowired
+    CommentService commentService;
+
     // Xem like của post
     @GetMapping("/getAllLike")
     public ResponseEntity<List<LikePost>> getAllLike(@RequestParam Long idPost) {
@@ -65,7 +68,7 @@ public class ReflectRestController {
         return new ResponseEntity<>(disLikePosts, HttpStatus.OK);
     }
 
-    // Tạo like nếu đã like sẽ unlike
+    // Tạo, xóa like
     @PostMapping("/createLike")
     public ResponseEntity<LikePost> createLike(@RequestBody LikePost likePost,
                                                @RequestParam Long idPost,
@@ -91,7 +94,7 @@ public class ReflectRestController {
         return new ResponseEntity<>(likePost, HttpStatus.OK);
     }
 
-    // Tạo dislike nếu đã dislike sẽ undislike
+    // Tạo, xóa dislike
     @PostMapping("/createDisLike")
     public ResponseEntity<DisLikePost> createDisLike(@RequestBody DisLikePost disLikePost,
                                                      @RequestParam Long idPost,
@@ -117,5 +120,84 @@ public class ReflectRestController {
         disLikePost.setPost(postOptional.get());
         disLikePostService.save(disLikePost);
         return new ResponseEntity<>(disLikePost, HttpStatus.OK);
+    }
+
+    // Tạo, xóa heart
+    @PostMapping("/createHeart")
+    public ResponseEntity<IconHeart> createHeart(@RequestBody IconHeart iconHeart,
+                                                 @RequestParam Long idPost,
+                                                 @RequestParam Long idUser) {
+        List<IconHeart> iconHearts = iconHeartService.findHeart(idPost, idUser);
+        if (iconHearts.size() == 1) {
+            iconHeartService.delete(iconHearts.get(0));
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        Optional<User> userOptional = userService.findById(idUser);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Optional<Post2> postOptional = postService.findById(idPost);
+        if (!postOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        iconHeart.setUser(userOptional.get());
+        iconHeart.setCreateAt(new Date());
+        iconHeart.setPost(postOptional.get());
+        iconHeartService.save(iconHeart);
+        return new ResponseEntity<>(iconHeart, HttpStatus.OK);
+    }
+
+    @PostMapping("/createLikeComment")
+    public ResponseEntity<LikeComment> createLikeComment(@RequestBody LikeComment likeComment,
+                                                         @RequestParam Long idComment,
+                                                         @RequestParam Long idUser) {
+        List<LikeComment> likeComments = likeCommentService.findLikeComment(idComment, idUser);
+        if (likeComments.size() == 1) {
+            likeCommentService.delete(likeComments.get(0));
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        Optional<User> userOptional = userService.findById(idUser);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Optional<Comment> commentOptional = commentService.findById(idComment);
+        if (!commentOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        likeComment.setUserLike(userOptional.get());
+        likeComment.setCreateAt(new Date());
+        likeComment.setComment(commentOptional.get());
+        likeCommentService.save(likeComment);
+        return new ResponseEntity<>(likeComment, HttpStatus.OK);
+    }
+
+    @PostMapping("/createDisLikeComment")
+    public ResponseEntity<DisLikeComment> createDisLikeComment(@RequestBody DisLikeComment disLikeComment,
+                                                               @RequestParam Long idComment,
+                                                               @RequestParam Long idUser) {
+        List<DisLikeComment> disLikeComments = disLikeCommentService.findDisLikeComment(idComment, idUser);
+        if (disLikeComments.size() == 1) {
+            disLikeCommentService.delete(disLikeComments.get(0));
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        Optional<User> userOptional = userService.findById(idUser);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Optional<Comment> commentOptional = commentService.findById(idComment);
+        if (!commentOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        disLikeComment.setUserDisLike(userOptional.get());
+        disLikeComment.setCreateAt(new Date());
+        disLikeComment.setComment(commentOptional.get());
+        disLikeCommentService.save(disLikeComment);
+        return new ResponseEntity<>(disLikeComment, HttpStatus.OK);
     }
 }
