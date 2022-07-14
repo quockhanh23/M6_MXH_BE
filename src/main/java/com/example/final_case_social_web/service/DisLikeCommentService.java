@@ -11,7 +11,7 @@ public interface DisLikeCommentService {
 
     List<DisLikeComment> findDisLikeComment(@Param("idComment") Long idComment, @Param("idUser") Long idUser);
 
-    List<DisLikeComment> findAllDisLikeCommentByPostId(@Param("idComment") Long idComment);
+    List<DisLikeComment> findAllDisLikeCommentByComment(@Param("idComment") Long idComment);
 
     void delete(DisLikeComment entity);
 

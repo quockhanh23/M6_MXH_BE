@@ -11,11 +11,11 @@ import java.util.List;
 
 @Repository
 public interface DisLikeCommentRepository extends JpaRepository<DisLikeComment, Long> {
-    @Modifying
-    @Query(value = "select * from dis_like_comment where comment_id = :idComment and user_id = :idUser;", nativeQuery = true)
-    List<DisLikeComment> findDisLikeComment(@Param("idComment") Long idComment, @Param("idUser") Long idUser);
 
     @Modifying
+    @Query(value = "select * from dis_like_comment where comment_id = :idComment and user_id = :idUser", nativeQuery = true)
+    List<DisLikeComment> findDisLikeComment (@Param("idComment")Long idComment, @Param("idUser") Long idUser);
+    @Modifying
     @Query(value = "select * from dis_like_comment where comment_id = :idComment and user_id is not null", nativeQuery = true)
-    List<DisLikeComment> findAllDisLikeCommentByPostId(@Param("idComment") Long idComment);
+    List<DisLikeComment> findAllDisLikeCommentByComment(@Param("idComment") Long idComment);
 }

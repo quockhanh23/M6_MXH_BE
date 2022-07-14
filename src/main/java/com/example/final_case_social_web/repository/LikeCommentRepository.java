@@ -14,7 +14,7 @@ public interface LikeCommentRepository extends JpaRepository<LikeComment, Long> 
 
     @Modifying
     @Query(value = "select * from like_comment where comment_id = :idComment and user_id = :idUser", nativeQuery = true)
-    List<LikeComment> findLikeComment (@Param("idComment")Long idPost, @Param("idUser") Long idUser);
+    List<LikeComment> findLikeComment (@Param("idComment")Long idComment, @Param("idUser") Long idUser);
 
     @Modifying
     @Query(value = "select * from like_comment where comment_id = :idComment and user_id is not null", nativeQuery = true)

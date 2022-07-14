@@ -9,4 +9,6 @@ public interface CommentService extends GeneralService<Comment> {
     List<Comment> getCommentByIdUser(@Param("id") Long id);
 
     List<Comment> getCommentByIdPost(@Param("id") Long id);
+
+    List<Comment> allComment();
 }

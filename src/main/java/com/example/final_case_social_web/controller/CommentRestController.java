@@ -1,11 +1,7 @@
 package com.example.final_case_social_web.controller;
 
-import com.example.final_case_social_web.model.Comment;
-import com.example.final_case_social_web.model.Post2;
-import com.example.final_case_social_web.model.User;
-import com.example.final_case_social_web.service.CommentService;
-import com.example.final_case_social_web.service.PostService;
-import com.example.final_case_social_web.service.UserService;
+import com.example.final_case_social_web.model.*;
+import com.example.final_case_social_web.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -14,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,11 +28,23 @@ public class CommentRestController {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private LikeCommentService likeCommentService;
+    @Autowired
+    private DisLikeCommentService disLikeCommentService;
+
 
     @GetMapping("/all")
     public ResponseEntity<Iterable<Comment>> allComment() {
-        Iterable<Comment> commentList = commentService.findAll();
-        return new ResponseEntity<>(commentList, HttpStatus.OK);
+        List<Comment> list = commentService.allComment();
+        for (int i = 0; i < list.size(); i++) {
+            List<LikeComment> likeComments = likeCommentService.findAllLikeCommentByPostId(list.get(i).getId());
+            list.get(i).setNumberLike((long) likeComments.size());
+            List<DisLikeComment> disLikeComments = disLikeCommentService.findAllDisLikeCommentByComment(list.get(i).getId());
+            list.get(i).setNumberDisLike((long) disLikeComments.size());
+            commentService.save(list.get(i));
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/allComment")

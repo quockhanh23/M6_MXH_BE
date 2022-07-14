@@ -26,8 +26,8 @@ public class DisLikeCommentImpl implements DisLikeCommentService {
     }
 
     @Override
-    public List<DisLikeComment> findAllDisLikeCommentByPostId(Long idPost) {
-        return disLikeCommentRepository.findAllDisLikeCommentByPostId(idPost);
+    public List<DisLikeComment> findAllDisLikeCommentByComment(Long idComment) {
+        return disLikeCommentRepository.findAllDisLikeCommentByComment(idComment);
     }
 
     @Override
