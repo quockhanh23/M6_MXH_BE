@@ -25,7 +25,7 @@ public class ShortNewsRestController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/all")
+    @GetMapping("/allShortNews")
     public ResponseEntity<Iterable<ShortNews>> allShortNews() {
         Iterable<ShortNews> shortNews = shortNewsService.findAll();
         return new ResponseEntity<>(shortNews, HttpStatus.OK);

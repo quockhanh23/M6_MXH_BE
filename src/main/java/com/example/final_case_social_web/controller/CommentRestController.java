@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,22 +26,20 @@ public class CommentRestController {
     private UserService userService;
     @Autowired
     private PostService postService;
-
     @Autowired
     private LikeCommentService likeCommentService;
     @Autowired
     private DisLikeCommentService disLikeCommentService;
 
-
     @GetMapping("/all")
     public ResponseEntity<Iterable<Comment>> allComment() {
         List<Comment> list = commentService.allComment();
-        for (int i = 0; i < list.size(); i++) {
-            List<LikeComment> likeComments = likeCommentService.findAllLikeCommentByPostId(list.get(i).getId());
-            list.get(i).setNumberLike((long) likeComments.size());
-            List<DisLikeComment> disLikeComments = disLikeCommentService.findAllDisLikeCommentByComment(list.get(i).getId());
-            list.get(i).setNumberDisLike((long) disLikeComments.size());
-            commentService.save(list.get(i));
+        for (Comment comment : list) {
+            List<LikeComment> likeComments = likeCommentService.findAllLikeCommentByPostId(comment.getId());
+            comment.setNumberLike((long) likeComments.size());
+            List<DisLikeComment> disLikeComments = disLikeCommentService.findAllDisLikeCommentByComment(comment.getId());
+            comment.setNumberDisLike((long) disLikeComments.size());
+            commentService.save(comment);
         }
         return new ResponseEntity<>(list, HttpStatus.OK);
     }

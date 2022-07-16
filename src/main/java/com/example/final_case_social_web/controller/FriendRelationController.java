@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @CrossOrigin("*")
@@ -39,7 +40,7 @@ public class FriendRelationController {
 
     // Danh sách những người đã gửi kết bạn trong trạng thái chờ đồng ý
     @GetMapping("/findAllListRequestAddFriendById")
-    public ResponseEntity<Iterable<FriendRelation>> findAllListRequestAddFriendById (@RequestParam Long idUser) {
+    public ResponseEntity<Iterable<FriendRelation>> findAllListRequestAddFriendById(@RequestParam Long idUser) {
         Iterable<FriendRelation> friendRelations = friendRelationService.findAllListRequestAddFriendById(idUser);
         if (!friendRelations.iterator().hasNext()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -47,40 +48,80 @@ public class FriendRelationController {
         return new ResponseEntity<>(friendRelations, HttpStatus.OK);
     }
 
+    // Danh sách bạn bè
+    @GetMapping("/listFriend")
+    public ResponseEntity<Iterable<FriendRelation>> listFriend(@RequestParam Long idUser) {
+        Iterable<FriendRelation> friendRelations = friendRelationService.listFriendByIdUser(idUser);
+        if (!friendRelations.iterator().hasNext()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(friendRelations, HttpStatus.OK);
+    }
+
     // Gửi lời mời kết bạn
-    @DeleteMapping("/addFriend")
+    @DeleteMapping("/sendRequestFriend")
     public ResponseEntity<Iterable<FriendRelation>> senRequestFriend(@RequestParam Long idUser, @RequestParam Long idFriend) {
         Optional<FriendRelation> optionalFriendRelation = friendRelationService.findByIdUserAndIdFriend(idUser, idFriend);
+        Optional<FriendRelation> optionalFriendRelation2 = friendRelationService.findByIdUserAndIdFriend(idFriend, idUser);
+        Optional<User> user = userService.findById(idFriend);
+        Optional<User> user2 = userService.findById(idUser);
+        if (Objects.equals(idUser, idFriend)) {
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
+        if (user.get().getStatus().equals(Constants.statusUser2)) {
+            return new ResponseEntity<>(HttpStatus.LOCKED);
+        }
         if (!optionalFriendRelation.isPresent()) {
             FriendRelation friendRelation1 = new FriendRelation();
+            friendRelation1.setUserLogin(user2.get());
             friendRelation1.setIdFriend(idFriend);
-            friendRelation1.setStatus(Constants.statusFriend3);
+            friendRelation1.setStatusFriend(Constants.statusFriend3);
             friendRelation1.setIdUser(idUser);
+            friendRelation1.setFriend(user.get());
             friendRelationService.save(friendRelation1);
-            return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            optionalFriendRelation.get().setStatus(Constants.statusFriend3);
+            optionalFriendRelation.get().setStatusFriend(Constants.statusFriend3);
             friendRelationService.save(optionalFriendRelation.get());
-            return new ResponseEntity<>(HttpStatus.OK);
         }
+        if (!optionalFriendRelation2.isPresent()) {
+            FriendRelation friendRelation2 = new FriendRelation();
+            friendRelation2.setFriend(user2.get());
+            friendRelation2.setIdUser(idFriend);
+            friendRelation2.setStatusFriend(Constants.statusFriend3);
+            friendRelation2.setIdFriend(idUser);
+            friendRelation2.setUserLogin(user.get());
+            friendRelationService.save(friendRelation2);
+        } else {
+            optionalFriendRelation2.get().setStatusFriend(Constants.statusFriend3);
+            friendRelationService.save(optionalFriendRelation2.get());
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // Đồng ý kết bạn
     @DeleteMapping("/acceptRequestFriend")
     public ResponseEntity<Iterable<FriendRelation>> acceptRequestFriend(@RequestParam Long idUser, @RequestParam Long idFriend) {
         Optional<FriendRelation> optionalFriendRelation = friendRelationService.findByIdUserAndIdFriend(idUser, idFriend);
+        Optional<FriendRelation> optionalFriendRelation2 = friendRelationService.findByIdUserAndIdFriend(idFriend, idUser);
         if (!optionalFriendRelation.isPresent()) {
-            FriendRelation friendRelation1 = new FriendRelation();
-            friendRelation1.setIdFriend(idFriend);
-            friendRelation1.setStatus(Constants.statusFriend1);
-            friendRelation1.setIdUser(idUser);
-            friendRelationService.save(friendRelation1);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            optionalFriendRelation.get().setStatus(Constants.statusFriend1);
-            friendRelationService.save(optionalFriendRelation.get());
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        if (!optionalFriendRelation2.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (Objects.equals(idUser, idFriend)) {
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
+        Optional<User> user = userService.findById(idFriend);
+        if (user.get().getStatus().equals(Constants.statusUser2)) {
+            return new ResponseEntity<>(HttpStatus.LOCKED);
+        }
+        optionalFriendRelation.get().setStatusFriend(Constants.statusFriend1);
+        optionalFriendRelation2.get().setStatusFriend(Constants.statusFriend1);
+        friendRelationService.save(optionalFriendRelation.get());
+        friendRelationService.save(optionalFriendRelation2.get());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(value = "/notFriend/{idUser}")
@@ -144,9 +185,9 @@ public class FriendRelationController {
         if (friendRelationSend == null || friendRelationReceive == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        friendRelationSend.get().setStatus("2");
+        friendRelationSend.get().setStatusFriend("2");
         friendRelationService.save(friendRelationSend.get());
-        friendRelationReceive.get().setStatus("2");
+        friendRelationReceive.get().setStatusFriend("2");
         friendRelationService.save(friendRelationReceive.get());
         List<FriendRelation> result = new ArrayList<>();
         result.add(friendRelationSend.get());
@@ -164,7 +205,7 @@ public class FriendRelationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    //    API hủy kết bạn, Hủy yêu cầu kết bạn
+    // API hủy kết bạn, Hủy yêu cầu kết bạn
     @DeleteMapping(value = "/{idUser}/{idFriend}")
     public ResponseEntity<FriendRelation> deleteFriendRelation(@PathVariable("idUser") Long idUser, @PathVariable("idFriend") Long idFriend) {
         Optional<FriendRelation> friendRelationSend = friendRelationService.findByIdUserAndIdFriend(idUser, idFriend);

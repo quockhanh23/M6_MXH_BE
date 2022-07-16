@@ -7,7 +7,7 @@ public class Constants {
     public static final String statusFriend1 = "Friend";
 
     public static final String statusFriend2 = "No friend";
-    public static final String statusFriend3 = "waiting";
+    public static final String statusFriend3 = "Waiting";
 
     public static final String statusFriend4 = "Blocked";
     public static final String statusUser1 = "Lock";

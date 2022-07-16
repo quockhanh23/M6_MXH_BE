@@ -60,4 +60,9 @@ public class FriendRelationServiceImpl implements FriendRelationService {
     public List<FriendRelation> findAllListRequestAddFriendById(Long idUser) {
         return friendRelationRepository.findAllListRequestAddFriendById(idUser);
     }
+
+    @Override
+    public List<FriendRelation> listFriendByIdUser(Long idUser) {
+        return friendRelationRepository.listFriendByIdUser(idUser);
+    }
 }

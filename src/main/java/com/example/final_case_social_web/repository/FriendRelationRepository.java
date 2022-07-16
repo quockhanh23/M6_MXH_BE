@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface FriendRelationRepository extends JpaRepository<FriendRelation, Long> {
     @Modifying
-    @Query(value = "select id_friend from friend_relation where id_user = :id1 and status = '3'", nativeQuery = true)
+    @Query(value = "select id_friend from friend_relation where id_user = :id1 and status_friend = '3'", nativeQuery = true)
     Iterable<BigInteger> findRequest(@Param("id1") Long id2);
 
     @Modifying
@@ -24,10 +24,14 @@ public interface FriendRelationRepository extends JpaRepository<FriendRelation, 
     Optional<FriendRelation> findByIdUserAndIdFriend(Long idUser, Long idFriend);
 
     @Modifying
-    @Query(value = "select id_friend from friend_relation where id_user = :id1 and status = '2'", nativeQuery = true)
+    @Query(value = "select id_friend from friend_relation where id_user = :id1 and status_friend = '2'", nativeQuery = true)
     Iterable<BigInteger> findIdFriend(@Param("id1") Long id2);
 
     @Modifying
-    @Query(value = "select * from user_table join friend_relation on user_table.id = friend_relation.id_user where id_user= :idUser and status = 'waiting'", nativeQuery = true)
+    @Query(value = "select * from user_table join friend_relation on user_table.id = friend_relation.id_user where id_user= :idUser and friend_relation.status_friend = 'waiting'", nativeQuery = true)
     List<FriendRelation> findAllListRequestAddFriendById(@Param("idUser") Long idUser);
+
+    @Modifying
+    @Query(value = "select * from friend_relation where id_user= :idUser and friend_relation.status_friend = 'Friend'", nativeQuery = true)
+    List<FriendRelation> listFriendByIdUser(@Param("idUser") Long idUser);
 }

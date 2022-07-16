@@ -13,7 +13,7 @@ import javax.persistence.Id;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Group {
+public class TheGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,5 +21,5 @@ public class Group {
     private String createBy;
     private String status;
     private String type;
-    private Long userId;
+    private Long numberUser;
 }
