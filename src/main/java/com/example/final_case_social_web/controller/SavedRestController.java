@@ -30,6 +30,8 @@ public class SavedRestController {
     @Autowired
     private PostService postService;
 
+
+    // Lưu trữ
     @GetMapping("/savePost")
     public ResponseEntity<Saved> savePost(@RequestParam Long idPost,
                                           @RequestParam Long idUser) {
@@ -52,6 +54,7 @@ public class SavedRestController {
         return new ResponseEntity<>(saved, HttpStatus.OK);
     }
 
+    // Xóa lưu trữ
     @GetMapping("/removeSavePost")
     public ResponseEntity<Saved> removeSavePost(@RequestParam Long idUser, @RequestParam Long idSaved) {
 

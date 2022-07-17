@@ -27,6 +27,7 @@ public class ShortNewsRestController {
     @Autowired
     private UserService userService;
 
+    // Lưu ngày mới
     @GetMapping("/newDay")
     public ResponseEntity<Iterable<ShortNews>> newDay() {
         Iterable<ShortNews> shortNews = shortNewsService.findAll();
@@ -39,6 +40,7 @@ public class ShortNewsRestController {
         return new ResponseEntity<>(shortNews, HttpStatus.OK);
     }
 
+    // Kiểm tra hạn sử dụng
     @GetMapping("/allShortNews")
     public ResponseEntity<Iterable<ShortNews>> allShortNews() {
         Iterable<ShortNews> shortNews = shortNewsService.findAll();
@@ -86,6 +88,7 @@ public class ShortNewsRestController {
         return new ResponseEntity<>(shortNews, HttpStatus.OK);
     }
 
+    // Tạo tin
     @PostMapping("/createShortNews")
     public ResponseEntity<ShortNews> createShortNews(@RequestBody ShortNews shortNews,
                                                      @RequestParam Long idUser) {
@@ -103,5 +106,40 @@ public class ShortNewsRestController {
         }
         shortNewsService.save(shortNews);
         return new ResponseEntity<>(shortNews, HttpStatus.OK);
+    }
+
+    // Xóa tin nhưng vẫn còn trong thùng rác
+    @DeleteMapping("/deleteShortNews")
+    public ResponseEntity<ShortNews> deleteShortNews(@RequestParam Long idSortNew,
+                                                     @RequestParam Long idUser) {
+
+        Optional<User> userOptional = userService.findById(idUser);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Optional<ShortNews> shortNewsOptional = shortNewsService.findById(idSortNew);
+        if (!shortNewsOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        shortNewsOptional.get().setRemaining(-1);
+        shortNewsService.save(shortNewsOptional.get());
+        return new ResponseEntity<>(shortNewsOptional.get(), HttpStatus.OK);
+    }
+
+    // Xóa hẳn tin
+    @DeleteMapping("/deleteShortNews2")
+    public ResponseEntity<ShortNews> deleteShortNews2(@RequestParam Long idSortNew,
+                                                      @RequestParam Long idUser) {
+
+        Optional<User> userOptional = userService.findById(idUser);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Optional<ShortNews> shortNewsOptional = shortNewsService.findById(idSortNew);
+        if (!shortNewsOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        shortNewsService.delete(shortNewsOptional.get());
+        return new ResponseEntity<>(shortNewsOptional.get(), HttpStatus.OK);
     }
 }

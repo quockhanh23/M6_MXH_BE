@@ -28,4 +28,8 @@ public class ShortNewsServiceImpl implements ShortNewsService {
         return shortNewsRepository.save(shortNews);
     }
 
+    @Override
+    public void delete(ShortNews entity) {
+        shortNewsRepository.delete(entity);
+    }
 }
