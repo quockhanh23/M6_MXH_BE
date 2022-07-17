@@ -20,4 +20,6 @@ public class Constants {
     public static final String defaultBackground = "assets/images/hinhnen.png";
 
     public static final String defaultBackground2 = "assets/images/defaultAva.png";
+    public static final String statusSaved1 = "Saved";
+    public static final String statusSaved2 = "Deleted";
 }
