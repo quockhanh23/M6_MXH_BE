@@ -31,6 +31,7 @@ public class CommentRestController {
     @Autowired
     private DisLikeCommentService disLikeCommentService;
 
+    // Danh sách tất cả comment và kiểm tra số lượng like, dislike
     @GetMapping("/all")
     public ResponseEntity<Iterable<Comment>> allComment() {
         List<Comment> list = commentService.allComment();
@@ -44,12 +45,14 @@ public class CommentRestController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    // Danh sách comment theo id post
     @GetMapping("/allComment")
     public ResponseEntity<List<Comment>> allCommentById(@RequestParam Long id) {
         List<Comment> commentList = commentService.getCommentByIdPost(id);
         return new ResponseEntity<>(commentList, HttpStatus.OK);
     }
 
+    // Tạo mới comment
     @PostMapping("/createComment")
     public ResponseEntity<Comment> creatComment(@RequestBody Comment comment,
                                                 @RequestParam Long idUser,
@@ -63,7 +66,7 @@ public class CommentRestController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         if (comment.getContent() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         comment.setCreateAt(LocalDateTime.now());
         comment.setDelete(false);
@@ -74,6 +77,7 @@ public class CommentRestController {
         return new ResponseEntity<>(comment, HttpStatus.OK);
     }
 
+    // Xóa comment
     @DeleteMapping("/deleteComment")
     public ResponseEntity<Comment> deleteComment(@RequestParam Long idUser,
                                                  @RequestParam Long idComment,
@@ -97,7 +101,7 @@ public class CommentRestController {
             commentService.save(commentOptional.get());
             return new ResponseEntity<>(commentOptional.get(), HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @GetMapping("/getAllCommentByIdUser")

@@ -149,6 +149,7 @@ public class ReflectRestController {
         return new ResponseEntity<>(iconHeart, HttpStatus.OK);
     }
 
+    // Tạo, xóa like comment
     @PostMapping("/createLikeComment")
     public ResponseEntity<LikeComment> createLikeComment(@RequestBody LikeComment likeComment,
                                                          @RequestParam Long idComment,
@@ -175,6 +176,7 @@ public class ReflectRestController {
         return new ResponseEntity<>(likeComment, HttpStatus.OK);
     }
 
+    // Tạo, xóa dislike comment
     @PostMapping("/createDisLikeComment")
     public ResponseEntity<DisLikeComment> createDisLikeComment(@RequestBody DisLikeComment disLikeComment,
                                                                @RequestParam Long idComment,

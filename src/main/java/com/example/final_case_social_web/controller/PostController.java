@@ -33,15 +33,13 @@ public class PostController {
     @Autowired
     private IconHeartService iconHeartService;
 
-    @Autowired
-    private CommentService commentService;
-
     @GetMapping("")
     public ResponseEntity<Iterable<Post2>> findAll() {
         Iterable<Post2> postIterable = postService.findAll();
         return new ResponseEntity<>(postIterable, HttpStatus.OK);
     }
 
+    // Danh sách post
     @GetMapping("/allPostPublic")
     public ResponseEntity<List<Post2>> allPostPublic() {
         List<Post2> post2List = postService.allPost();
@@ -57,12 +55,14 @@ public class PostController {
         return new ResponseEntity<>(post2List, HttpStatus.OK);
     }
 
+    // Danh sách post bởi user
     @GetMapping("/findAllPostByUser")
     public ResponseEntity<List<Post2>> findAllPostByUser(@RequestParam Long id) {
         List<Post2> post2List = postService.findAllPostByUser(id);
         return new ResponseEntity<>(post2List, HttpStatus.OK);
     }
 
+    // Tạo post
     @PostMapping("/createPost")
     public ResponseEntity<Post2> createPost(@RequestBody Post2 post, @RequestParam Long idUser) {
         Optional<User> userOptional = userService.findById(idUser);
@@ -84,6 +84,7 @@ public class PostController {
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
+    // Chỉnh sửa post
     @PutMapping("/updatePost")
     public ResponseEntity<Post2> update(@RequestParam Long idPost,
                                         @RequestParam Long idUser,
@@ -105,6 +106,7 @@ public class PostController {
         return new ResponseEntity<>(postOptional.get(), HttpStatus.OK);
     }
 
+    // Đổi trạng thái post sang public
     @DeleteMapping("/changeStatusPublic")
     public ResponseEntity<Post2> changeStatusPublic(@RequestParam Long idPost,
                                                     @RequestParam Long idUser) {
@@ -121,6 +123,7 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // Đổi trạng thái post sang private
     @DeleteMapping("/changeStatusPrivate")
     public ResponseEntity<Post2> changeStatus(@RequestParam Long idPost,
                                               @RequestParam Long idUser) {
@@ -137,6 +140,7 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // Đổi trạng thái post sang delete
     @DeleteMapping("/changeStatusDelete")
     public ResponseEntity<Post2> delete(@RequestParam Long idPost,
                                         @RequestParam Long idUser) {
