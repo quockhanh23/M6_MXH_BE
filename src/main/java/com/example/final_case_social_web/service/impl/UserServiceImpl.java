@@ -131,4 +131,5 @@ public class UserServiceImpl implements UserService {
     public List<User> findAllUser() {
         return userRepository.findAllUser();
     }
+
 }

@@ -55,10 +55,9 @@ public class ShortNewsRestController {
             int yearToday = Integer.parseInt(shortNewsList.get(i).getToDay().toString().substring(0, 4));
             int yearCreate = Integer.parseInt(shortNewsList.get(i).getCreateAt().toString().substring(0, 4));
 
-
             if (today < createDay) {
                 int dayF = 30;
-                if (monthToday > monthCreate) {
+                if (monthToday > monthCreate || (monthToday < monthCreate && yearCreate < yearToday)) {
                     if (monthToday == 1 || monthToday == 3 || monthToday == 5 ||
                             monthToday == 7 || monthToday == 8 || monthToday == 10 || monthToday == 12) {
                         today = dayF + 1;
@@ -74,13 +73,6 @@ public class ShortNewsRestController {
                             today = dayF + 3;
                         }
                     }
-                }
-
-                if (monthToday < monthCreate) {
-                    if (yearCreate < yearToday) {
-
-                    }
-
                 }
             }
 

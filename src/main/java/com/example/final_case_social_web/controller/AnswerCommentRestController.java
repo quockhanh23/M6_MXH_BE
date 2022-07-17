@@ -60,7 +60,7 @@ public class AnswerCommentRestController {
         return new ResponseEntity<>(answerComment, HttpStatus.OK);
     }
 
-    // Xóa AnswerComment (đổi trạng thái delete = true)
+    // Xóa AnswerComment
     @DeleteMapping("/deleteAnswerComment")
     public ResponseEntity<AnswerComment> deleteAnswerComment(@RequestParam Long idUser,
                                                              @RequestParam Long idComment,
