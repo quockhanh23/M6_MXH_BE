@@ -2,14 +2,18 @@ package com.example.final_case_social_web.controller;
 
 import com.example.final_case_social_web.common.Constants;
 import com.example.final_case_social_web.common.LogMessage;
+import com.example.final_case_social_web.dto.PostDTO;
+import com.example.final_case_social_web.dto.UserDTO;
 import com.example.final_case_social_web.model.*;
 import com.example.final_case_social_web.service.*;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -33,15 +37,45 @@ public class PostController {
     @Autowired
     private IconHeartService iconHeartService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @GetMapping("")
-    public ResponseEntity<Iterable<Post2>> findAll() {
+    public ResponseEntity<Iterable<PostDTO>> findAll() {
+
         Iterable<Post2> postIterable = postService.findAll();
-        return new ResponseEntity<>(postIterable, HttpStatus.OK);
+
+        List<Post2> post2List;
+        post2List = (List<Post2>) postIterable;
+
+        List<PostDTO> postDTOS = new ArrayList<>();
+        PostDTO postDTO = new PostDTO();
+        List<UserDTO> userDTOS = new ArrayList<>();
+
+        Iterable<User> userIterable = userService.findAll();
+
+        List<User> users;
+        users = (List<User>) userIterable;
+
+        for (int i = 0; i < post2List.size(); i++) {
+
+            postDTO = modelMapper.map(post2List.get(i), PostDTO.class);
+            postDTOS.add(postDTO);
+
+            for (int j = 0; j < users.size(); j++) {
+                UserDTO userDTO = modelMapper.map(users.get(j), UserDTO.class);
+                userDTOS.add(userDTO);
+                if (post2List.get(i).getUser().getId().equals(userDTO.getId())) {
+                    postDTO.setUserDTO(userDTO);
+                }
+            }
+        }
+        return new ResponseEntity<>(postDTOS, HttpStatus.OK);
     }
 
     // Danh sách post
     @GetMapping("/allPostPublic")
-    public ResponseEntity<List<Post2>> allPostPublic() {
+    public ResponseEntity<List<PostDTO>> allPostPublic() {
         List<Post2> post2List = postService.allPost();
         for (int i = 0; i < post2List.size(); i++) {
             List<LikePost> likePost = likePostService.findAllLikeByPostId(post2List.get(i).getId());
@@ -52,7 +86,18 @@ public class PostController {
             post2List.get(i).setIconHeart((long) iconHearts.size());
             postService.save(post2List.get(i));
         }
-        return new ResponseEntity<>(post2List, HttpStatus.OK);
+
+        List<PostDTO> postDTOS = new ArrayList<>();
+        PostDTO postDTO = new PostDTO();
+        UserDTO userDTO = new UserDTO();
+
+        for (int i = 0; i < post2List.size(); i++) {
+            userDTO = modelMapper.map(post2List.get(i).getUser(), UserDTO.class);
+            postDTO = modelMapper.map(post2List.get(i), PostDTO.class);
+            postDTO.setUserDTO(userDTO);
+            postDTOS.add(postDTO);
+        }
+        return new ResponseEntity<>(postDTOS, HttpStatus.OK);
     }
 
     // Danh sách post bởi user

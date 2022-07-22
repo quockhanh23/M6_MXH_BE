@@ -1,7 +1,9 @@
 package com.example.final_case_social_web.service;
 
 
+import com.example.final_case_social_web.dto.UserDTO;
 import com.example.final_case_social_web.model.User;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -30,5 +32,7 @@ public interface UserService extends UserDetailsService {
     boolean isCorrectConfirmPassword(User user);
 
     List<User> findAllUser();
+
+    UserDTO getOne(Long id);
 
 }

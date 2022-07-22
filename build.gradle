@@ -35,6 +35,8 @@ dependencies {
 
     implementation 'org.hibernate:hibernate-validator:6.1.0.Final'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.7.1'
+
+    implementation 'org.modelmapper:modelmapper:2.3.0'
 }
 
 tasks.named('test') {

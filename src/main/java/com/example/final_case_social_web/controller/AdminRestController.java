@@ -1,10 +1,12 @@
 package com.example.final_case_social_web.controller;
 
+import com.example.final_case_social_web.dto.UserDTO;
 import com.example.final_case_social_web.model.User;
 import com.example.final_case_social_web.service.CommentService;
 import com.example.final_case_social_web.service.PostService;
 import com.example.final_case_social_web.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
@@ -32,17 +34,26 @@ public class AdminRestController {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    ModelMapper mapper;
+
     @GetMapping("/getAllUser")
-    public ResponseEntity<Iterable<User>> getAllUser() {
+    public ResponseEntity<Iterable<UserDTO>> getAllUser() {
+        List<UserDTO> list = new ArrayList<>();
         Iterable<User> users = userService.findAllRoleUser();
         if (!users.iterator().hasNext()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         List<User> userList = new ArrayList<>();
         userList = (List<User>) users;
+
         if (userList.size() == 0) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        for (int i = 0; i < userList.size(); i++) {
+            UserDTO userDto = mapper.map(userList.get(i), UserDTO.class);
+            list.add(userDto);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }
