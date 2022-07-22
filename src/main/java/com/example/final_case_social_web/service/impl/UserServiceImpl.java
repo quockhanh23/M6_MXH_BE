@@ -1,7 +1,6 @@
 package com.example.final_case_social_web.service.impl;
 
 
-import com.example.final_case_social_web.config.ModelMapperConfig;
 import com.example.final_case_social_web.dto.UserDTO;
 import com.example.final_case_social_web.model.User;
 import com.example.final_case_social_web.model.UserPrinciple;
@@ -9,14 +8,11 @@ import com.example.final_case_social_web.repository.UserRepository;
 import com.example.final_case_social_web.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;

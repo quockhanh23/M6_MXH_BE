@@ -155,40 +155,64 @@ public class PostController {
     @DeleteMapping("/changeStatusPublic")
     public ResponseEntity<Post2> changeStatusPublic(@RequestParam Long idPost,
                                                     @RequestParam Long idUser) {
-        Optional<Post2> postOptional = postService.findById(idPost);
-        if (!postOptional.isPresent()) {
+        if (!postService.checkPostPublic(idPost).isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
         Optional<User> userOptional = userService.findById(idUser);
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        postOptional.get().setStatus(Constants.statusPost1);
-        postService.save(postOptional.get());
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        if (postService.checkPostPublic(idPost).get().getUser().getId().equals(userOptional.get().getId())) {
+            postService.save(postService.checkPostPublic(idPost).get());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     // Đổi trạng thái post sang private
     @DeleteMapping("/changeStatusPrivate")
     public ResponseEntity<Post2> changeStatus(@RequestParam Long idPost,
                                               @RequestParam Long idUser) {
-        Optional<Post2> postOptional = postService.findById(idPost);
-        if (!postOptional.isPresent()) {
+        if (!postService.checkPostPrivate(idPost).isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
         Optional<User> userOptional = userService.findById(idUser);
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        postOptional.get().setStatus(Constants.statusPost2);
-        postService.save(postOptional.get());
-        return new ResponseEntity<>(HttpStatus.OK);
+        if (postService.checkPostPrivate(idPost).get().getUser().getId().equals(userOptional.get().getId())) {
+            postService.save(postService.checkPostPrivate(idPost).get());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    // Đổi trạng thái post sang delete
+    // Đổi trạng thái post sang delete (chuyển vào thùng rác)
     @DeleteMapping("/changeStatusDelete")
     public ResponseEntity<Post2> delete(@RequestParam Long idPost,
                                         @RequestParam Long idUser) {
+        if (!postService.checkPostDelete(idPost).isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Optional<User> userOptional = userService.findById(idUser);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (postService.checkPostDelete(idPost).get().getUser().getId().equals(userOptional.get().getId())) {
+            postService.save(postService.checkPostDelete(idPost).get());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    }
+
+    // Xoá hẳn post khỏi database
+    @DeleteMapping("/deletePost")
+    public ResponseEntity<Post2> deletePost(@RequestParam Long idPost,
+                                            @RequestParam Long idUser) {
         Optional<Post2> postOptional = postService.findById(idPost);
         if (!postOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -197,10 +221,14 @@ public class PostController {
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        postOptional.get().setStatus(Constants.statusPost3);
-        postOptional.get().setDelete(true);
-        postService.save(postOptional.get());
-        return new ResponseEntity<>(HttpStatus.OK);
+        if (postOptional.get().getStatus().equals(Constants.statusPost3)) {
+            if (postOptional.get().isDelete()) {
+                if (postOptional.get().getId().equals(userOptional.get().getId())) {
+                    postService.delete(postOptional.get());
+                }
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @GetMapping("/{id}")
