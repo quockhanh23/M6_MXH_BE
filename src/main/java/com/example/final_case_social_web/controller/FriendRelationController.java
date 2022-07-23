@@ -25,7 +25,6 @@ public class FriendRelationController {
 
     @Autowired
     private FriendRelationService friendRelationService;
-
     @Autowired
     private UserService userService;
 

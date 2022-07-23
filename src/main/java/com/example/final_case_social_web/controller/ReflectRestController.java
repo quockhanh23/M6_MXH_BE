@@ -29,16 +29,12 @@ public class ReflectRestController {
     private UserService userService;
     @Autowired
     PostService postService;
-
     @Autowired
     LikeCommentService likeCommentService;
-
     @Autowired
     DisLikeCommentService disLikeCommentService;
-
     @Autowired
     IconHeartService iconHeartService;
-
     @Autowired
     CommentService commentService;
 

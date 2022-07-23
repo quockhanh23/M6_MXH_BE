@@ -36,19 +36,14 @@ public class UserController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
     private VerificationTokenService verificationTokenService;
-
     @Autowired
     private JwtService jwtService;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private RoleService roleService;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 

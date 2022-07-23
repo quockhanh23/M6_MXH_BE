@@ -27,10 +27,8 @@ import java.util.Optional;
 public class ShortNewsRestController {
     @Autowired
     private ShortNewsService shortNewsService;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     ModelMapper modelMapper;
 

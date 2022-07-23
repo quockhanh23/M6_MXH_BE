@@ -6,6 +6,7 @@ import com.example.final_case_social_web.service.SavedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,5 +28,10 @@ public class SavedServiceImpl implements SavedService {
     @Override
     public Saved save(Saved saved) {
         return savedRepository.save(saved);
+    }
+
+    @Override
+    public List<Saved> findAllSavedPost(Long idUser) {
+        return savedRepository.findAllSavedPost(idUser);
     }
 }

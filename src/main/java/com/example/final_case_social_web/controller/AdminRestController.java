@@ -27,17 +27,15 @@ public class AdminRestController {
 
     @Autowired
     private UserService userService;
-
     @Autowired
     private PostService postService;
-
     @Autowired
     ModelMapper modelMapper;
 
     // Xem tất cả user
     @GetMapping("/getAllUser")
     public ResponseEntity<Iterable<UserDTO>> getAllUser() {
-        List<UserDTO> list = new ArrayList<>();
+        List<UserDTO> userDTOList = new ArrayList<>();
         Iterable<User> users = userService.findAllRoleUser();
         if (!users.iterator().hasNext()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -50,9 +48,9 @@ public class AdminRestController {
         }
         for (int i = 0; i < userList.size(); i++) {
             UserDTO userDto = modelMapper.map(userList.get(i), UserDTO.class);
-            list.add(userDto);
+            userDTOList.add(userDto);
         }
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return new ResponseEntity<>(userDTOList, HttpStatus.OK);
     }
 
     // Ban user

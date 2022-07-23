@@ -30,13 +30,10 @@ public class PostRestController {
     private UserService userService;
     @Autowired
     private LikePostService likePostService;
-
     @Autowired
     private DisLikePostService disLikePostService;
-
     @Autowired
     private IconHeartService iconHeartService;
-
     @Autowired
     private ModelMapper modelMapper;
 
@@ -87,7 +84,7 @@ public class PostRestController {
             postService.save(post2List.get(i));
         }
 
-        List<PostDTO> postDTOS = new ArrayList<>();
+        List<PostDTO> postDTOList = new ArrayList<>();
         PostDTO postDTO = new PostDTO();
         UserDTO userDTO = new UserDTO();
 
@@ -95,9 +92,9 @@ public class PostRestController {
             userDTO = modelMapper.map(post2List.get(i).getUser(), UserDTO.class);
             postDTO = modelMapper.map(post2List.get(i), PostDTO.class);
             postDTO.setUserDTO(userDTO);
-            postDTOS.add(postDTO);
+            postDTOList.add(postDTO);
         }
-        return new ResponseEntity<>(postDTOS, HttpStatus.OK);
+        return new ResponseEntity<>(postDTOList, HttpStatus.OK);
     }
 
     // Danh sách post bởi user
