@@ -225,6 +225,7 @@ public class PostRestController {
             if (postOptional.get().isDelete()) {
                 if (postOptional.get().getId().equals(userOptional.get().getId())) {
                     postService.delete(postOptional.get());
+                    return new ResponseEntity<>(HttpStatus.OK);
                 }
             }
         }

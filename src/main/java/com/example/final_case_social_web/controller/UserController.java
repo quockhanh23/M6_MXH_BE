@@ -165,7 +165,9 @@ public class UserController {
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        userOptional.get().setStatus(Constants.statusUser3);
+        if (userOptional.get().getId().equals(id)) {
+            userOptional.get().setStatus(Constants.statusUser3);
+        }
         userService.save(userOptional.get());
         return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
     }
@@ -176,19 +178,11 @@ public class UserController {
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        userOptional.get().setStatus(Constants.statusUser1);
-        userService.save(userOptional.get());
-        return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/changeStatusUserBan/{id}")
-    public ResponseEntity<User> changeStatusUserBan(@PathVariable Long id) {
-        Optional<User> userOptional = userService.findById(id);
-        if (!userOptional.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (userOptional.get().getId().equals(id)) {
+            userOptional.get().setStatus(Constants.statusUser1);
+            userService.save(userOptional.get());
+            return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
         }
-        userOptional.get().setStatus(Constants.statusUser2);
-        userService.save(userOptional.get());
-        return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
+        return new ResponseEntity<>(userOptional.get(), HttpStatus.NOT_MODIFIED);
     }
 }
