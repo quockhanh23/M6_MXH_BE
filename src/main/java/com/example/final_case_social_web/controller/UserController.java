@@ -2,6 +2,7 @@ package com.example.final_case_social_web.controller;
 
 import com.example.final_case_social_web.common.Constants;
 import com.example.final_case_social_web.common.LogMessage;
+import com.example.final_case_social_web.dto.UserDTO;
 import com.example.final_case_social_web.model.JwtResponse;
 import com.example.final_case_social_web.model.Role;
 import com.example.final_case_social_web.model.User;
@@ -11,6 +12,7 @@ import com.example.final_case_social_web.service.UserService;
 import com.example.final_case_social_web.service.VerificationTokenService;
 import com.example.final_case_social_web.service.impl.JwtService;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
@@ -46,9 +48,12 @@ public class UserController {
     private RoleService roleService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ModelMapper modelMapper;
 
+    // Gợi ý kết bạn
     @GetMapping("/allUser")
-    public ResponseEntity<Iterable<User>> allUser() {
+    public ResponseEntity<Iterable<User>> listUserSuggest() {
         Iterable<User> users = userService.findAllUser();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
@@ -125,9 +130,14 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getProfile(@PathVariable Long id) {
+    public ResponseEntity<UserDTO> getProfile(@PathVariable Long id) {
         Optional<User> userOptional = this.userService.findById(id);
-        return userOptional.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        UserDTO userDTO = new UserDTO();
+        userDTO = modelMapper.map(userOptional.get(), UserDTO.class);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     @PutMapping("/users/{id}")

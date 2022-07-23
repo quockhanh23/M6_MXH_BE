@@ -230,8 +230,16 @@ public class PostRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Post2> findOne(@PathVariable Long id) {
+    public ResponseEntity<PostDTO> findOne(@PathVariable Long id) {
         Optional<Post2> postOptional = postService.findById(id);
-        return postOptional.map(post -> new ResponseEntity<>(post, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if (!postOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        PostDTO postDTO = new PostDTO();
+        UserDTO userDTO = new UserDTO();
+        userDTO = modelMapper.map(postOptional.get().getUser(), UserDTO.class);
+        postDTO = modelMapper.map(postOptional.get(), PostDTO.class);
+        postDTO.setUserDTO(userDTO);
+        return new ResponseEntity<>(postDTO, HttpStatus.OK);
     }
 }

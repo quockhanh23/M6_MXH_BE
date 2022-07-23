@@ -123,34 +123,6 @@ public class FriendRelationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/notFriend/{idUser}")
-    public ResponseEntity<List<User>> getListNotFriend(@PathVariable("idUser") Long idU) {
-        List<User> users = new ArrayList<>();
-        Iterable<BigInteger> idUserNotFriend = friendRelationService.findAllIdUserNotFriend(idU, idU);
-        for (BigInteger id : idUserNotFriend) {
-            Optional<User> user = userService.findById(id.longValue());
-            users.add(user.get());
-        }
-        if (users == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/{idUser}")
-    public ResponseEntity<Iterable<User>> getAllFriend(@PathVariable("idUser") Long idU) {
-        List<User> users = new ArrayList<>();
-        Iterable<BigInteger> listIdFriend = friendRelationService.findIdFriend(idU);
-        for (BigInteger id : listIdFriend) {
-            Optional<User> user = userService.findById(id.longValue());
-            users.add(user.get());
-        }
-        if (users == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }
-
     // API tìm kiếm User gửi Request kết bạn đến mình
     @GetMapping("/friendRequest/{idUser}")
     public ResponseEntity<List<User>> findRequest(@PathVariable("idUser") Long idUser) {
@@ -182,16 +154,6 @@ public class FriendRelationController {
         result.add(friendRelationSend.get());
         result.add(friendRelationReceive.get());
         return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<FriendRelation> updateFriendRelation(@PathVariable("id") Long id, @RequestBody FriendRelation friendRelation) {
-        Optional<FriendRelation> friendRelation1 = friendRelationService.findById(id);
-
-        if (friendRelation1 == null) {
-            return new ResponseEntity<FriendRelation>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // API hủy kết bạn, Hủy yêu cầu kết bạn

@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -17,6 +14,14 @@ public class GroupParticipant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long idGroup;
-    private Long idUser;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "theGroup_id")
+    private TheGroup theGroup;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "postGroup_id")
+    private Post2 post2Group;
+
 }

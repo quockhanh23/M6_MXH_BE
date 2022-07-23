@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -24,4 +21,9 @@ public class TheGroup {
     private String status;
     private String type;
     private Long numberUser;
+    @Column(length = 1000)
+    private String avatarGroup;
+    @Column(length = 1000)
+    private String coverGroup;
+    private Long idUserCreate;
 }
