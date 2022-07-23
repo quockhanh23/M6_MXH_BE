@@ -22,7 +22,7 @@ import java.util.Optional;
 @CrossOrigin("*")
 @RequestMapping("/api/posts")
 @Slf4j
-public class PostController {
+public class PostRestController {
 
     @Autowired
     private PostService postService;
