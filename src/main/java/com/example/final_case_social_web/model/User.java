@@ -1,5 +1,6 @@
 package com.example.final_case_social_web.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,8 +23,11 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
+
     private String password;
+
     private String confirmPassword;
+
     private boolean enabled = true;
 
     @ManyToMany(fetch = FetchType.EAGER)

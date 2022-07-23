@@ -83,18 +83,7 @@ public class UserController {
             roles1.add(role1);
             user.setRoles(roles1);
         }
-        if (user.getAvatar().equals("assets/images/defaultAva.png")) {
-            user.setAvatar(Constants.defaultImageAvatar);
-        }
-        if (user.getGender().equals("Nữ")) {
-            user.setAvatar(Constants.defaultImageAvatarGirl);
-        }
-        if (user.getGender().equals("")) {
-            user.setGender(Constants.genderDefault);
-        }
-        if (user.getGender().equals(Constants.genderDefault)) {
-            user.setAvatar("https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg");
-        }
+        userService.createDefault(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
         user.setStatus(Constants.statusUser3);

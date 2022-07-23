@@ -1,6 +1,7 @@
 package com.example.final_case_social_web.service.impl;
 
 
+import com.example.final_case_social_web.common.Constants;
 import com.example.final_case_social_web.dto.UserDTO;
 import com.example.final_case_social_web.model.User;
 import com.example.final_case_social_web.model.UserPrinciple;
@@ -143,5 +144,21 @@ public class UserServiceImpl implements UserService {
         }
         UserDTO userDTO = mapper.map(userOptional.get(), UserDTO.class);
         return userDTO;
+    }
+
+    @Override
+    public void createDefault(User user) {
+        if (user.getAvatar().equals("assets/images/defaultAva.png")) {
+            user.setAvatar(Constants.defaultImageAvatar);
+        }
+        if (user.getGender().equals("Nữ")) {
+            user.setAvatar(Constants.defaultImageAvatarGirl);
+        }
+        if (user.getGender().equals("")) {
+            user.setGender(Constants.genderDefault);
+        }
+        if (user.getGender().equals(Constants.genderDefault)) {
+            user.setAvatar("https://i.pinimg.com/736x/cc/16/0c/cc160c19dbd165c43046c176223f10fe.jpg");
+        }
     }
 }
