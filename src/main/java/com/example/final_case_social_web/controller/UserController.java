@@ -170,11 +170,15 @@ public class UserController {
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        if (userOptional.get().getStatus().equals(Constants.statusUser3)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
         if (userOptional.get().getId().equals(id)) {
             userOptional.get().setStatus(Constants.statusUser3);
+            userService.save(userOptional.get());
+            return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
         }
-        userService.save(userOptional.get());
-        return new ResponseEntity<>(userOptional.get(), HttpStatus.OK);
+        return new ResponseEntity<>(userOptional.get(), HttpStatus.NOT_MODIFIED);
     }
 
     @DeleteMapping("/changeStatusUserLock/{id}")
@@ -182,6 +186,9 @@ public class UserController {
         Optional<User> userOptional = userService.findById(id);
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (userOptional.get().getStatus().equals(Constants.statusUser1)) {
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         if (userOptional.get().getId().equals(id)) {
             userOptional.get().setStatus(Constants.statusUser1);
