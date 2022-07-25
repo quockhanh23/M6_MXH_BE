@@ -3,10 +3,8 @@ package com.example.final_case_social_web.controller;
 import com.example.final_case_social_web.common.Constants;
 import com.example.final_case_social_web.common.LogMessage;
 import com.example.final_case_social_web.dto.UserDTO;
-import com.example.final_case_social_web.model.JwtResponse;
-import com.example.final_case_social_web.model.Role;
-import com.example.final_case_social_web.model.User;
-import com.example.final_case_social_web.model.VerificationToken;
+import com.example.final_case_social_web.model.*;
+import com.example.final_case_social_web.repository.LastUserLoginRepository;
 import com.example.final_case_social_web.service.RoleService;
 import com.example.final_case_social_web.service.UserService;
 import com.example.final_case_social_web.service.VerificationTokenService;
@@ -48,8 +46,18 @@ public class UserController {
     private RoleService roleService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private LastUserLoginRepository lastUserLoginRepository;
     @Autowired
     private ModelMapper modelMapper;
+
+    // Lịch sử đăng nhập
+    @GetMapping("/historyLogin")
+    public ResponseEntity<List<LastUserLogin>> historyLogin() {
+        List<LastUserLogin> userLogins = lastUserLoginRepository.historyLogin();
+        return new ResponseEntity<>(userLogins, HttpStatus.OK);
+    }
 
     // Gợi ý kết bạn
     @GetMapping("/allUser")
@@ -123,9 +131,28 @@ public class UserController {
                 }
             }
         }
+
         String jwt = jwtService.generateTokenLogin(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
+
+        Optional<LastUserLogin> lastUserLogin = lastUserLoginRepository.findAllByIdUser(currentUser.getId());
+        if (lastUserLogin.isPresent()) {
+            lastUserLogin.get().setIdUser(currentUser.getId());
+            lastUserLogin.get().setLoginTime(new Date());
+            lastUserLogin.get().setUserName(currentUser.getUsername());
+            lastUserLogin.get().setAvatar(currentUser.getAvatar());
+            lastUserLogin.get().setFullName(currentUser.getFullName());
+            lastUserLoginRepository.save(lastUserLogin.get());
+        } else {
+            LastUserLogin lastUserLogin1 = new LastUserLogin();
+            lastUserLogin1.setIdUser(currentUser.getId());
+            lastUserLogin1.setUserName(currentUser.getUsername());
+            lastUserLogin1.setLoginTime(new Date());
+            lastUserLogin1.setAvatar(currentUser.getAvatar());
+            lastUserLogin1.setFullName(currentUser.getFullName());
+            lastUserLoginRepository.save(lastUserLogin1);
+        }
         return ResponseEntity.ok(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), userDetails.getAuthorities()));
     }
 
