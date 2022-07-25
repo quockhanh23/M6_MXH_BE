@@ -112,6 +112,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
+        final double startTime = System.currentTimeMillis();
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
@@ -153,6 +154,11 @@ public class UserController {
             lastUserLogin1.setFullName(currentUser.getFullName());
             lastUserLoginRepository.save(lastUserLogin1);
         }
+        final double elapsedTimeMillis = System.currentTimeMillis();
+        System.out.println(LogMessage.logMessageStrikeThrough);
+        System.out.println("Total execution time: " + (elapsedTimeMillis - startTime));
+        System.out.println("Total execution time(s): " + (elapsedTimeMillis - startTime) / 1000);
+        System.out.println(LogMessage.logMessageStrikeThrough);
         return ResponseEntity.ok(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), userDetails.getAuthorities()));
     }
 
