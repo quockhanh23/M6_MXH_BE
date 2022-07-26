@@ -119,6 +119,9 @@ public class PostRestController {
         post.setDelete(false);
         post.setUser(userOptional.get());
         post.setCreateAt(new Date());
+        post.setIconHeart(0L);
+        post.setNumberDisLike(0L);
+        post.setNumberLike(0L);
         if (post.getContent().equals("") || post.getContent() == null) {
             return new ResponseEntity<>(post, HttpStatus.NOT_FOUND);
         }
