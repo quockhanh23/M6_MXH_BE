@@ -123,21 +123,6 @@ public class FriendRelationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // API tìm kiếm User gửi Request kết bạn đến mình
-    @GetMapping("/friendRequest/{idUser}")
-    public ResponseEntity<List<User>> findRequest(@PathVariable("idUser") Long idUser) {
-        List<User> users = new ArrayList<>();
-        Iterable<BigInteger> idFriend = friendRelationService.findRequest(idUser);
-        for (BigInteger id : idFriend) {
-            Optional<User> user = userService.findById(id.longValue());
-            users.add(user.get());
-        }
-        if (users == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }
-
     // API đồng ý kết bạn
     @GetMapping("/acceptance/{idUser}/{idRequest}")
     public ResponseEntity<Iterable<FriendRelation>> acceptFriend(@PathVariable("idUser") Long idUser, @PathVariable("idRequest") Long idRequest) {

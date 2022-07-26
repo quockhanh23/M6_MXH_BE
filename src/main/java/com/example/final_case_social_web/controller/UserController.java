@@ -155,10 +155,10 @@ public class UserController {
             lastUserLoginRepository.save(lastUserLogin1);
         }
         final double elapsedTimeMillis = System.currentTimeMillis();
-        System.out.println(LogMessage.logMessageStrikeThrough);
+        log.info(LogMessage.logMessageStrikeThrough);
         System.out.println("Total execution time: " + (elapsedTimeMillis - startTime));
         System.out.println("Total execution time(s): " + (elapsedTimeMillis - startTime) / 1000);
-        System.out.println(LogMessage.logMessageStrikeThrough);
+        log.info(LogMessage.logMessageStrikeThrough);
         return ResponseEntity.ok(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), userDetails.getAuthorities()));
     }
 

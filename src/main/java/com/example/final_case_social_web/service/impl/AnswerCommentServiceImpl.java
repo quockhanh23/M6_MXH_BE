@@ -28,4 +28,8 @@ public class AnswerCommentServiceImpl implements AnswerCommentService {
         return answerCommentRepository.save(answerComment);
     }
 
+    @Override
+    public void delete(AnswerComment entity) {
+        answerCommentRepository.delete(entity);
+    }
 }

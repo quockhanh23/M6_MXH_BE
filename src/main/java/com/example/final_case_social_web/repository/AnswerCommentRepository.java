@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AnswerCommentRepository extends JpaRepository<AnswerComment, Long> {
+    void delete(AnswerComment entity);
 }

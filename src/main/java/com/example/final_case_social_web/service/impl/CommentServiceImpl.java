@@ -40,7 +40,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> allComment() {
-        return commentRepository.findAll();
+    public List<Comment> getCommentTrue() {
+        return commentRepository.getCommentTrue();
     }
 }

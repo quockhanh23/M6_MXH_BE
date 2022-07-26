@@ -2,6 +2,7 @@ package com.example.final_case_social_web.controller;
 
 import com.example.final_case_social_web.model.*;
 import com.example.final_case_social_web.service.*;
+import com.sun.org.apache.bcel.internal.generic.DADD;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,10 +33,13 @@ public class CommentRestController {
     @Autowired
     private DisLikeCommentService disLikeCommentService;
 
+    @Autowired
+    private AnswerCommentService answerCommentService;
+
     // Danh sách tất cả comment và kiểm tra số lượng like, dislike
     @GetMapping("/all")
     public ResponseEntity<Iterable<Comment>> allComment() {
-        List<Comment> list = commentService.allComment();
+        List<Comment> list = commentService.getCommentTrue();
         for (Comment comment : list) {
             List<LikeComment> likeComments = likeCommentService.findAllLikeCommentByPostId(comment.getId());
             comment.setNumberLike((long) likeComments.size());
@@ -99,6 +104,15 @@ public class CommentRestController {
             commentOptional.get().setDeleteAt(LocalDateTime.now());
             commentOptional.get().setDelete(true);
             commentService.save(commentOptional.get());
+
+            Iterable<AnswerComment> answerCommentIterable = answerCommentService.findAll();
+            List<AnswerComment> answerCommentList = (List<AnswerComment>) answerCommentIterable;
+            for (int i = 0; i < answerCommentList.size(); i++) {
+                if (answerCommentList.get(i).getComment().getId().equals(commentOptional.get().getId())) {
+                    answerCommentList.get(i).setDelete(true);
+                    answerCommentList.get(i).setDeleteAt(LocalDateTime.now());
+                }
+            }
             return new ResponseEntity<>(commentOptional.get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);

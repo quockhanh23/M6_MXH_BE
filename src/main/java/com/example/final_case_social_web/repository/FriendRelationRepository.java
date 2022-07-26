@@ -13,9 +13,6 @@ import java.util.Optional;
 
 @Repository
 public interface FriendRelationRepository extends JpaRepository<FriendRelation, Long> {
-    @Modifying
-    @Query(value = "select id_friend from friend_relation where id_user = :id1 and status_friend = '3'", nativeQuery = true)
-    Iterable<BigInteger> findRequest(@Param("id1") Long id2);
 
     @Modifying
     @Query(value = "select id from user_table where id not in (select id_friend from friend_relation where id_user = :id1) and id != :id2 ", nativeQuery = true)
