@@ -56,7 +56,6 @@ public class SavedRestController {
             savedDTO.setPostDTO(postDTO);
             savedDTOS.add(savedDTO);
         }
-
         return new ResponseEntity<>(savedDTOS, HttpStatus.OK);
     }
 
@@ -92,7 +91,6 @@ public class SavedRestController {
         saved.setIdUser(idUser);
         saved.setPost2(postOptional.get());
         savedService.save(saved);
-
         return new ResponseEntity<>(saved.getStatus(), HttpStatus.OK);
     }
 

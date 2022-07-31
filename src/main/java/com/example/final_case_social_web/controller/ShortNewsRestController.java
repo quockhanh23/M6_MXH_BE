@@ -105,7 +105,6 @@ public class ShortNewsRestController {
             shortNewsDTO.setUserDTO(userDTO);
             shortNewsDTOList.add(shortNewsDTO);
         }
-
         return new ResponseEntity<>(shortNewsDTOList, HttpStatus.OK);
     }
 
